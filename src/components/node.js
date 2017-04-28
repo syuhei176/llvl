@@ -61,18 +61,26 @@ export default class RectangleComponent extends React.Component {
 	}
 
 	render() {
-		//let {x,y,w,h} = this.props.item;
+		let {item} = this.props;
 		let transform = "translate("+this.state.x+","+this.state.y+")";
 		return (<g transform={transform}>
-			{this.props.item.render()}
+			{item.render()}
 	      <text x="6" y="20"></text>
-	      <rect onClick={this.onClick.bind(this)}
+	      {(item.shape == 'rect') ?
+	      (<rect onClick={this.onClick.bind(this)}
 	      		onMouseDown={this.onMouseDown.bind(this)}
 	      		onMouseEnter={this.onMouseEnter.bind(this)}
 	      		onMouseLeave={this.onMouseLeave.bind(this)}
 	      		onMouseMove={this.onMouseMove.bind(this)}
 	      		onMouseUp={this.onMouseUp.bind(this)}
-	      width="200" height="100" style={{"opacity":0}} ></rect>
+	      		width="200" height="100" style={{"opacity":0}} ></rect>)
+	  		: (<circle onClick={this.onClick.bind(this)}
+	      		onMouseDown={this.onMouseDown.bind(this)}
+	      		onMouseEnter={this.onMouseEnter.bind(this)}
+	      		onMouseLeave={this.onMouseLeave.bind(this)}
+	      		onMouseMove={this.onMouseMove.bind(this)}
+	      		onMouseUp={this.onMouseUp.bind(this)}
+	  			r="70" style={{"opacity":0}}></circle>)}
 	      </g>)
 	}
 }

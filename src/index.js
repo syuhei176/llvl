@@ -15,6 +15,10 @@ module.exports = {
 				type: 'circle',
 				x: 100,
 				y: 120
+			},{
+				type: 'process',
+				x: 200,
+				y: 120
 			}]
 		});
 		ReactDOM.render(
