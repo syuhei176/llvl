@@ -1,44 +1,39 @@
-import Rectangle from './rect'
+import React from 'react'
+import Rect from './rect'
 
+export default class Process extends Rect {
 
-class Process extends Rectangle {
+	constructor(options, diagram, diagramSet) {
+		super(options, diagram, diagramSet)
+		this.shape = 'rect';
+	}
+
 	recv(event) {
+		if(!event) event = {type: 'data_in', payload: new Date().getTime()}
 		if(event.type == 'data_in') {
 			//状態を変える
-			state({
-				color: '#f0f0f0'
+			this.changeState({
+				color: '#f0f0b5',
+				text: event.payload
 			})
 
 			//隣接するオブジェクトに影響を与える
-			affect_neighbors({
+			this.affectNeighbors({
+				type: 'data_in',
 				payload: event.payload
 			})
-
-			//子オブジェクトに影響を与える
-			affect_child()
 
 		}
 
 	}
-}
 
-class Wire extends Rectangle {
-	recv(event) {
-		if(event.type == 'data_in') {
-			//状態を変える
-			state({
-				color: '#f0f0f0'
-			})
-
-			//隣接するオブジェクトに影響を与える
-			affect_neighbors({
-				payload: event.payload
-			})
-
-			//子オブジェクトに影響を与える
-			affect_child()
-
-		}
-
+	render(state) {
+		//stateと見た目のマッピング
+		//this.children[].stateも
+		let style = {"fill":state.color||'#fff',"strokeWidth":3,"stroke":"rgb(0,0,0)"};
+		return (<g>
+	     	<rect width="200" height="100" rx="6" ry="6" style={style}></rect>
+	     	<text>{state.text}</text>
+	     	</g>);
 	}
 }

@@ -7,7 +7,12 @@ const DRAG_MOVE = 1;
 export default class RectangleComponent extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { x: props.item.x, y:props.item.y }
+		this.state = { x: props.item.x, y:props.item.y, nodeState:{} }
+		this.props.item.on('change-state', (state) => {
+			this.setState({
+				nodeState: state
+			});
+		});
 	}
 
 	onClick() {
@@ -24,7 +29,6 @@ export default class RectangleComponent extends React.Component {
 	}
 
 	onMouseMove(e) {
-		//console.log('onMouseMove');
 		if(this.state.dragMode == DRAG_MOVE) {
 			//console.log( this.offset );
 			var currentPos = new Point2D(e.pageX, e.pageY);
@@ -44,35 +48,55 @@ export default class RectangleComponent extends React.Component {
 	}
 
 	onMouseUp(e) {
-		console.log('onMouseUp');
 		if(this.state.dragMode == DRAG_MOVE) {
 		}
 		this.state.dragMode = DRAG_NONE;
 	}
 
 	onMouseEnter() {
-		console.log('onMouseEnter');
-
 	}
 
 	onMouseLeave() {
-		console.log('onMouseLeave');
 		this.state.dragMode = DRAG_NONE;
 	}
 
+	onFocus() {
+		if(this.props.item.onClick) this.props.item.onClick();
+	}
+
+	onSend() {
+		if(this.props.item.recv) this.props.item.recv();
+	}
+
 	render() {
-		//let {x,y,w,h} = this.props.item;
-		let transform = "translate("+this.state.x+","+this.state.y+")";
+		let {item} = this.props;
+		let transform = "translate("+(this.state.x-100)+","+(this.state.y-50)+")";
 		return (<g transform={transform}>
-			{this.props.item.render()}
-	      <text x="6" y="20"></text>
-	      <rect onClick={this.onClick.bind(this)}
+			{item.render(this.state.nodeState)}
+	      {(item.shape == 'rect') ?
+	      (<rect onClick={this.onClick.bind(this)}
 	      		onMouseDown={this.onMouseDown.bind(this)}
 	      		onMouseEnter={this.onMouseEnter.bind(this)}
 	      		onMouseLeave={this.onMouseLeave.bind(this)}
 	      		onMouseMove={this.onMouseMove.bind(this)}
 	      		onMouseUp={this.onMouseUp.bind(this)}
-	      width="200" height="100" style={{"opacity":0}} ></rect>
+	      		width="200" height="100" style={{"opacity":0}} ></rect>)
+	  		: (<circle onClick={this.onClick.bind(this)}
+	      		onMouseDown={this.onMouseDown.bind(this)}
+	      		onMouseEnter={this.onMouseEnter.bind(this)}
+	      		onMouseLeave={this.onMouseLeave.bind(this)}
+	      		onMouseMove={this.onMouseMove.bind(this)}
+	      		onMouseUp={this.onMouseUp.bind(this)}
+	  			cx={35+100} cy={35+50} r="70" style={{"opacity":0}}></circle>)}
+	  		{!!item.getGraph()?(<g>
+		      <rect x="0" y="0" width="60" height="20" style={{"fill":"#5aef60"}} onClick={this.onFocus.bind(this)}></rect>
+		      <text x="6" y="17" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onFocus.bind(this)}>Focus</text>
+		      </g>):(<div/>)}
+	  		<g>
+		      <rect x="0" y="20" width="60" height="20" style={{"fill":"#5a60ef"}} onClick={this.onSend.bind(this)}></rect>
+		      <text x="6" y="37" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onSend.bind(this)}>Send</text>
+		      </g>
+		      <text x="6" y="57" fill="#333" style={{"fontSize":"14px"}}>{item.name}</text>
 	      </g>)
 	}
 }
