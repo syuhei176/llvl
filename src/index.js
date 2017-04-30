@@ -1,28 +1,15 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Diagram from './objects/diagram'
-import Graph from './components/graph'
+import Main from './objects/main'
+import Editor from './components/graphs'
 import Process from './objects/process'
+import sample from './sample'
 
 module.exports = {
 	start: function(id) {
-		let diagram = new Diagram({
-			items: [{
-				type: 'rect',
-				x: 50,
-				y:50
-			},{
-				type: 'circle',
-				x: 100,
-				y: 120
-			},{
-				type: 'process',
-				x: 200,
-				y: 120
-			}]
-		});
+		let diagramSet = new Main(sample);
 		ReactDOM.render(
-		  <Graph data={diagram}/>,
+		  <Editor data={diagramSet}/>,
 		  document.getElementById(id)
 		);
 	}

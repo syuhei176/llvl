@@ -5,10 +5,13 @@ export default class Rectangle {
 	//attrs
 	//neighbors
 	//children
-	constructor(options) {
+	constructor(options, diagram, diagramSet) {
 		this.x = options.x || 0;
 		this.y = options.y || 0;
 		this.shape = 'rect';
+		this.graph = options.graph;
+		this.parent = diagram;
+		this.diagramSet = diagramSet;
 	}
 
 
@@ -30,6 +33,12 @@ export default class Rectangle {
 
 	set(key, value) {
 		this[key] = value
+	}
+
+	onClick() {
+		if(this.graph) {
+			this.diagramSet.change(this.graph);
+		}
 	}
 
 	render() {

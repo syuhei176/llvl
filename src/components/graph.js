@@ -9,6 +9,6 @@ export default class Graph extends React.Component {
 		let items = this.props.data.items.map((item) => {
 			return (<Rectangle item={item}></Rectangle>)
 		});
-		return (<div><svg width="600" height="480"><g>{items}</g></svg></div>)
+		return (<g>{items}</g>)
 	}
 }

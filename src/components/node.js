@@ -24,7 +24,6 @@ export default class RectangleComponent extends React.Component {
 	}
 
 	onMouseMove(e) {
-		//console.log('onMouseMove');
 		if(this.state.dragMode == DRAG_MOVE) {
 			//console.log( this.offset );
 			var currentPos = new Point2D(e.pageX, e.pageY);
@@ -44,20 +43,20 @@ export default class RectangleComponent extends React.Component {
 	}
 
 	onMouseUp(e) {
-		console.log('onMouseUp');
 		if(this.state.dragMode == DRAG_MOVE) {
 		}
 		this.state.dragMode = DRAG_NONE;
 	}
 
 	onMouseEnter() {
-		console.log('onMouseEnter');
-
 	}
 
 	onMouseLeave() {
-		console.log('onMouseLeave');
 		this.state.dragMode = DRAG_NONE;
+	}
+
+	onFocus() {
+		if(this.props.item.onClick) this.props.item.onClick();
 	}
 
 	render() {
@@ -65,7 +64,6 @@ export default class RectangleComponent extends React.Component {
 		let transform = "translate("+this.state.x+","+this.state.y+")";
 		return (<g transform={transform}>
 			{item.render()}
-	      <text x="6" y="20"></text>
 	      {(item.shape == 'rect') ?
 	      (<rect onClick={this.onClick.bind(this)}
 	      		onMouseDown={this.onMouseDown.bind(this)}
@@ -81,6 +79,8 @@ export default class RectangleComponent extends React.Component {
 	      		onMouseMove={this.onMouseMove.bind(this)}
 	      		onMouseUp={this.onMouseUp.bind(this)}
 	  			r="70" style={{"opacity":0}}></circle>)}
+	      <rect x="0" y="0" width="60" height="20" style={{"fill":"#eee"}} onClick={this.onFocus.bind(this)}></rect>
+	      <text x="5" y="18" style={{"fontSize":"12px"}} onClick={this.onFocus.bind(this)}>Focus</text>
 	      </g>)
 	}
 }
