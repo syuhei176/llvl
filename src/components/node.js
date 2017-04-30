@@ -7,7 +7,12 @@ const DRAG_MOVE = 1;
 export default class RectangleComponent extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { x: props.item.x, y:props.item.y }
+		this.state = { x: props.item.x, y:props.item.y, nodeState:{} }
+		this.props.item.on('change-state', (state) => {
+			this.setState({
+				nodeState: state
+			});
+		});
 	}
 
 	onClick() {
@@ -59,11 +64,15 @@ export default class RectangleComponent extends React.Component {
 		if(this.props.item.onClick) this.props.item.onClick();
 	}
 
+	onSend() {
+		if(this.props.item.recv) this.props.item.recv();
+	}
+
 	render() {
 		let {item} = this.props;
-		let transform = "translate("+this.state.x+","+this.state.y+")";
+		let transform = "translate("+(this.state.x-100)+","+(this.state.y-50)+")";
 		return (<g transform={transform}>
-			{item.render()}
+			{item.render(this.state.nodeState)}
 	      {(item.shape == 'rect') ?
 	      (<rect onClick={this.onClick.bind(this)}
 	      		onMouseDown={this.onMouseDown.bind(this)}
@@ -78,9 +87,16 @@ export default class RectangleComponent extends React.Component {
 	      		onMouseLeave={this.onMouseLeave.bind(this)}
 	      		onMouseMove={this.onMouseMove.bind(this)}
 	      		onMouseUp={this.onMouseUp.bind(this)}
-	  			r="70" style={{"opacity":0}}></circle>)}
-	      <rect x="0" y="0" width="60" height="20" style={{"fill":"#eee"}} onClick={this.onFocus.bind(this)}></rect>
-	      <text x="5" y="18" style={{"fontSize":"12px"}} onClick={this.onFocus.bind(this)}>Focus</text>
+	  			cx={35+100} cy={35+50} r="70" style={{"opacity":0}}></circle>)}
+	  		{!!item.getGraph()?(<g>
+		      <rect x="0" y="0" width="60" height="20" style={{"fill":"#5aef60"}} onClick={this.onFocus.bind(this)}></rect>
+		      <text x="6" y="17" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onFocus.bind(this)}>Focus</text>
+		      </g>):(<div/>)}
+	  		<g>
+		      <rect x="0" y="20" width="60" height="20" style={{"fill":"#5a60ef"}} onClick={this.onSend.bind(this)}></rect>
+		      <text x="6" y="37" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onSend.bind(this)}>Send</text>
+		      </g>
+		      <text x="6" y="57" fill="#333" style={{"fontSize":"14px"}}>{item.name}</text>
 	      </g>)
 	}
 }

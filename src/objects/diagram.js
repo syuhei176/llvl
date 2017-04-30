@@ -1,23 +1,41 @@
 import Rect from './rect'
 import Circle from './circle'
+import RectObject from './object'
+import State from './state'
 import Process from './process'
 
 export default class Diagram {
 	constructor(json, ds) {
-		this.items = this.parse(json, ds);
+		this.parse(json, ds);
 	}
 
-	render() {
-
+	init() {
+		this.nodes.forEach((node)=>{
+			node.init();
+		});
 	}
 
 	parse(json, ds) {
 		this.id = json.id;
-		return json.nodes.map((item) => {
+		this.nodes = json.nodes.map((item) => {
 			if(item.type == 'rect') return new Rect(item, this, ds);
 			else if(item.type == 'circle') return new Circle(item, this, ds);
+			else if(item.type == 'object') return new RectObject(item, this, ds);
+			else if(item.type == 'state') return new State(item, this, ds);
 			else if(item.type == 'process') return new Process(item, this, ds);
 		})
+		this.edges = json.edges.map((item) => {
+			console.log(this.nodes, item)
+			let edge = {
+				id: item.id,
+				name: item.name,
+				src: this.nodes.filter((n) => {return n.id == item.src})[0],
+				target: this.nodes.filter((n) => {return n.id == item.target})[0]
+			}
+			edge.src.edges.push(edge);
+			return edge;
+		})
+
 	}
 }
 

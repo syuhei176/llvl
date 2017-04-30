@@ -6,16 +6,13 @@ export default class DiagramSet extends EventEmitter {
 	constructor(json) {
 		super(),
 		this.items = this.parse(json);
-	}
-
-	render() {
-
+		this.items.forEach((item)=>{item.init()});
 	}
 
 	changeDefault() {
 		this.change(this.items[0].id);
 	}
-	
+
 	change(graph) {
 		this.emit('change', {
 			graph: graph
