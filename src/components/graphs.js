@@ -21,11 +21,18 @@ export default class Graphs extends React.Component {
 	render() {
 		let {index} = this.state;
 		let {data} = this.props;
+		let currentGraph = data.items.filter((item)=>{
+			return item.id == index;
+		})[0];
 		let graphs = data.items.map((item)=>{
-			console.log(item, index)
-			return (<Graph data={item} hidden={item.id != index}></Graph>)
+			console.log(item.id, currentGraph)
+			if( (item.id == index) || (currentGraph.parentNode && currentGraph.parentNode.parent.id == item.id) ) {
+				return (<Graph data={item} hidden={false}></Graph>)
+			}else{
+				return (<Graph data={item} hidden={true}></Graph>)
+			}
 		})
-		return (<div><svg width="600" height="60"><g>
+		return (<div><svg width="600" height="36"><g>
 			<text x="10" y="20" style={{"fontSize":"20px"}} onClick={this.changeDefault.bind(this)}>Return</text>
 		</g></svg>{graphs}</div>)
 	}

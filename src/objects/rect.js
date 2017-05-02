@@ -101,7 +101,7 @@ export default class Rect extends EventEmitter{
 	render(state) {
 		//stateと見た目のマッピング
 		//this.children[].stateも
-	     return (<rect width="200" height="100" style={{"fill":"rgb(255,255,250)","strokeWidth":5,"stroke":"rgb(0,0,0)"}}></rect>);
+	     return (<rect width="200" height="100" style={{"fill":"rgb(255,255,250)","strokeWidth":3,"stroke":"rgb(0,0,0)"}}></rect>);
 	}
 
 }

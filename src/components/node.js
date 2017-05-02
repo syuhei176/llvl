@@ -92,11 +92,11 @@ export default class RectangleComponent extends React.Component {
 	  			cx={35+(width/2)} cy={35+50} r="70" style={{"opacity":0}}></circle>)}
   			<g transform={icon_transform}>
 	  		{!!item.getGraph()?(<g>
-		      <rect x="0" y="0" width="60" height="20" style={{"fill":"#55e760"}} onClick={this.onFocus.bind(this)}></rect>
+		      <rect x="0" y="0" width="60" height="20" style={{"fill":"#55e760","stroke":"#111","strokeWidth":1}} onClick={this.onFocus.bind(this)}></rect>
 		      <text x="6" y="17" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onFocus.bind(this)}>Focus</text>
 		      </g>):(<div/>)}
 	  			<g>
-		      		<rect x="0" y="20" width="60" height="20" style={{"fill":"#5a60ef"}} onClick={this.onSend.bind(this)}></rect>
+		      		<rect x="0" y="20" width="60" height="20" style={{"fill":"#5a60ef","stroke":"#111","strokeWidth":1}} onClick={this.onSend.bind(this)}></rect>
 		      		<text x="6" y="37" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onSend.bind(this)}>Send</text>
 		      	</g>
 	      	</g>

@@ -13,7 +13,7 @@ export default class Process extends Rect {
 		if(event.type == 'event') {
 			//状態を変える
 			this.changeState({
-				color: '#f0f0b5',
+				color: '#fff',
 				text: event.payload
 			})
 
@@ -26,6 +26,10 @@ export default class Process extends Rect {
 			//子オブジェクトに影響を与える
 			//affect_child()
 		}else if(event.type == 'switch') {
+			this.changeState({
+				color: '#f0f0b5',
+				text: event.payload
+			})
 			this.affectParent({
 				type: 'switch',
 				payload: event.payload,

@@ -3034,7 +3034,7 @@ var Rect = function (_EventEmitter) {
 	}, {
 		key: 'render',
 		value: function render(state) {
-			return _react2.default.createElement('rect', { width: '200', height: '100', style: { "fill": "rgb(255,255,250)", "strokeWidth": 5, "stroke": "rgb(0,0,0)" } });
+			return _react2.default.createElement('rect', { width: '200', height: '100', style: { "fill": "rgb(255,255,250)", "strokeWidth": 3, "stroke": "rgb(0,0,0)" } });
 		}
 	}]);
 
@@ -6866,17 +6866,27 @@ var Process = function (_Rect) {
 	_createClass(Process, [{
 		key: 'recv',
 		value: function recv(event) {
+			var _this2 = this;
+
 			if (!event) event = { type: 'data_in', payload: new Date().getTime() };
 			if (event.type == 'data_in') {
 				this.changeState({
 					color: '#f0f0b5',
 					text: event.payload
 				});
+				setTimeout(function () {
+					_this2.changeState({
+						color: '#fff',
+						text: ''
+					});
+				}, 1200);
 
-				this.affectNeighbors({
-					type: 'data_in',
-					payload: event.payload
-				});
+				setTimeout(function () {
+					_this2.affectNeighbors({
+						type: 'data_in',
+						payload: event.payload
+					});
+				}, 900);
 			}
 		}
 	}, {
@@ -10179,16 +10189,23 @@ var Graphs = function (_React$Component) {
 			var index = this.state.index;
 			var data = this.props.data;
 
+			var currentGraph = data.items.filter(function (item) {
+				return item.id == index;
+			})[0];
 			var graphs = data.items.map(function (item) {
-				console.log(item, index);
-				return _react2.default.createElement(_graph2.default, { data: item, hidden: item.id != index });
+				console.log(item.id, currentGraph);
+				if (item.id == index || currentGraph.parentNode && currentGraph.parentNode.parent.id == item.id) {
+					return _react2.default.createElement(_graph2.default, { data: item, hidden: false });
+				} else {
+					return _react2.default.createElement(_graph2.default, { data: item, hidden: true });
+				}
 			});
 			return _react2.default.createElement(
 				'div',
 				null,
 				_react2.default.createElement(
 					'svg',
-					{ width: '600', height: '60' },
+					{ width: '600', height: '36' },
 					_react2.default.createElement(
 						'g',
 						null,
@@ -10300,17 +10317,17 @@ module.exports = {
 		id: 'g1',
 		nodes: [{
 			id: 'n1',
-			name: 'ステートマシン',
+			name: 'State Machine',
 			type: 'object',
 			x: 150,
-			y: 140,
+			y: 120,
 			graph: 'g2'
 		}, {
 			id: 'n2',
-			name: 'データフロー',
+			name: 'Data Flow',
 			type: 'rect',
-			x: 270,
-			y: 260,
+			x: 300,
+			y: 250,
 			graph: 'g3'
 		}],
 		edges: [{
@@ -10324,22 +10341,22 @@ module.exports = {
 			id: 'n1',
 			type: 'state',
 			x: 150,
-			y: 150
+			y: 120
 		}, {
 			id: 'n2',
 			type: 'state',
 			x: 450,
-			y: 180
+			y: 150
 		}, {
 			id: 'n3',
 			type: 'state',
 			x: 170,
-			y: 300
+			y: 270
 		}, {
 			id: 'n4',
 			type: 'state',
 			x: 460,
-			y: 350
+			y: 320
 		}],
 		edges: [{
 			id: 'e1',
@@ -10356,6 +10373,11 @@ module.exports = {
 			name: 'time',
 			src: 'n3',
 			target: 'n4'
+		}, {
+			id: 'e4',
+			name: 'time',
+			src: 'n4',
+			target: 'n1'
 		}]
 
 	}, {
@@ -10364,18 +10386,28 @@ module.exports = {
 			id: 'n1',
 			type: 'process',
 			x: 150,
-			y: 220
+			y: 100
 		}, {
 			id: 'n2',
 			type: 'process',
 			x: 400,
-			y: 270
+			y: 100
+		}, {
+			id: 'n3',
+			type: 'process',
+			x: 400,
+			y: 300
 		}],
 		edges: [{
 			id: 'e1',
 			name: 'wire',
 			src: 'n1',
 			target: 'n2'
+		}, {
+			id: 'e2',
+			name: 'wire',
+			src: 'n2',
+			target: 'n3'
 		}]
 
 	}]
@@ -10464,7 +10496,7 @@ var Edge = function (_React$Component) {
 			return _react2.default.createElement(
 				'g',
 				null,
-				_react2.default.createElement('path', { stroke: '#333', strokeWidth: '5', fill: 'none', d: path }),
+				_react2.default.createElement('path', { stroke: '#333', strokeWidth: '2', fill: 'none', d: path }),
 				_react2.default.createElement(
 					'text',
 					{ x: namePos.x, y: namePos.y },
@@ -10536,7 +10568,7 @@ var Graph = function (_React$Component) {
 				{ style: { "display": this.props.hidden ? "none" : "block" } },
 				_react2.default.createElement(
 					'svg',
-					{ width: '700', height: '480', style: { "border": "solid 1px #333" } },
+					{ width: '700', height: '380', style: { "border": "solid 1px #333" } },
 					_react2.default.createElement(
 						'g',
 						null,
@@ -10698,7 +10730,7 @@ var RectangleComponent = function (_React$Component) {
 					!!item.getGraph() ? _react2.default.createElement(
 						'g',
 						null,
-						_react2.default.createElement('rect', { x: '0', y: '0', width: '60', height: '20', style: { "fill": "#55e760" }, onClick: this.onFocus.bind(this) }),
+						_react2.default.createElement('rect', { x: '0', y: '0', width: '60', height: '20', style: { "fill": "#55e760", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onFocus.bind(this) }),
 						_react2.default.createElement(
 							'text',
 							{ x: '6', y: '17', fill: '#fff', style: { "fontSize": "12px" }, onClick: this.onFocus.bind(this) },
@@ -10708,7 +10740,7 @@ var RectangleComponent = function (_React$Component) {
 					_react2.default.createElement(
 						'g',
 						null,
-						_react2.default.createElement('rect', { x: '0', y: '20', width: '60', height: '20', style: { "fill": "#5a60ef" }, onClick: this.onSend.bind(this) }),
+						_react2.default.createElement('rect', { x: '0', y: '20', width: '60', height: '20', style: { "fill": "#5a60ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onSend.bind(this) }),
 						_react2.default.createElement(
 							'text',
 							{ x: '6', y: '37', fill: '#fff', style: { "fontSize": "12px" }, onClick: this.onSend.bind(this) },
@@ -10990,7 +11022,7 @@ var RectObject = function (_Rect) {
 			return _react2.default.createElement(
 				'g',
 				null,
-				_react2.default.createElement('rect', { width: '200', height: '100', style: { "fill": state.color || '#fff', "strokeWidth": 3, "stroke": "rgb(0,0,0)" } }),
+				_react2.default.createElement('rect', { width: '200', height: '100', style: { "fill": state.color || '#fff', "strokeWidth": 2, "stroke": "rgb(0,0,0)" } }),
 				_react2.default.createElement(
 					'text',
 					{ x: '20', y: '50' },
@@ -11053,7 +11085,7 @@ var Process = function (_Rect) {
 			if (!event) event = { type: 'event', payload: 'time' };
 			if (event.type == 'event') {
 				this.changeState({
-					color: '#f0f0b5',
+					color: '#fff',
 					text: event.payload
 				});
 
@@ -11062,6 +11094,10 @@ var Process = function (_Rect) {
 					payload: event.payload
 				});
 			} else if (event.type == 'switch') {
+				this.changeState({
+					color: '#f0f0b5',
+					text: event.payload
+				});
 				this.affectParent({
 					type: 'switch',
 					payload: event.payload,

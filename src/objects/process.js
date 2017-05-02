@@ -16,12 +16,20 @@ export default class Process extends Rect {
 				color: '#f0f0b5',
 				text: event.payload
 			})
+			setTimeout(() => {
+				this.changeState({
+					color: '#fff',
+					text: ''
+				})
+			}, 1200);
 
-			//隣接するオブジェクトに影響を与える
-			this.affectNeighbors({
-				type: 'data_in',
-				payload: event.payload
-			})
+			setTimeout(() => {
+				//隣接するオブジェクトに影響を与える
+				this.affectNeighbors({
+					type: 'data_in',
+					payload: event.payload
+				})
+			}, 900);
 
 		}
 

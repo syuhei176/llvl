@@ -43,6 +43,6 @@ export default class RectObject extends Rect {
 	render(state) {
 		//stateと見た目のマッピング
 		//this.children[].stateも
-	     return (<g><rect width="200" height="100" style={{"fill":state.color||'#fff',"strokeWidth":3,"stroke":"rgb(0,0,0)"}}></rect><text x="20" y="50">{state.text}</text></g>);
+	     return (<g><rect width="200" height="100" style={{"fill":state.color||'#fff',"strokeWidth":2,"stroke":"rgb(0,0,0)"}}></rect><text x="20" y="50">{state.text}</text></g>);
 	}
 }

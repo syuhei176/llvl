@@ -13,6 +13,6 @@ export default class Graph extends React.Component {
 		let edges = this.props.data.edges.map((item) => {
 			return (<Edge item={item}></Edge>)
 		});
-		return (<div style={{"display":(this.props.hidden?"none":"block")}}><svg width="700" height="480" style={{"border":"solid 1px #333"}}><g><g>{edges}</g><g>{nodes}</g></g></svg></div>)
+		return (<div style={{"display":(this.props.hidden?"none":"block")}}><svg width="700" height="380" style={{"border":"solid 1px #333"}}><g><g>{edges}</g><g>{nodes}</g></g></svg></div>)
 	}
 }
