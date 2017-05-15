@@ -7,8 +7,8 @@ export default class Graph extends React.Component {
 		super(props)
 	}
 	render() {
-		let nodes = this.props.tree.map((item) => {
-			return (<Node item={item}></Node>)
+		let nodes = this.props.tree.items.map((item) => {
+			return (<Node x={100} y={100} item={item} depth={1}></Node>)
 		});
 		/*
 		let edges = this.props.data.edges.map((item) => {
