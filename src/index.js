@@ -1,15 +1,21 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import Main from './objects/main'
-import Editor from './components/graphs'
-import Process from './objects/process'
+import SyntaxTree from './syntax'
+import Editor from './components/editor'
+//import Process from './objects/process'
 import sample from './sample'
 
+/*
+ Editor
+ Term
+ Evaluator
+ SyntaxTree
+*/
 module.exports = {
 	start: function(id) {
-		let diagramSet = new Main(sample);
+		let tree = new SyntaxTree(sample);
 		ReactDOM.render(
-		  <Editor data={diagramSet}/>,
+		  <Editor tree={sample}/>,
 		  document.getElementById(id)
 		);
 	}

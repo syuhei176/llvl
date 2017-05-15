@@ -1,5 +1,6 @@
 import React from 'react'
 import Point2D from 'point2d'
+import Node from './node'
 
 const DRAG_NONE = 0;
 const DRAG_MOVE = 1;
@@ -7,12 +8,14 @@ const DRAG_MOVE = 1;
 export default class RectangleComponent extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state = { x: props.item.x, y:props.item.y, nodeState:{} }
+		this.state = { x: props.x, y:props.y, nodeState:{} }
+		/*
 		this.props.item.on('change-state', (state) => {
 			this.setState({
 				nodeState: state
 			});
 		});
+		*/
 	}
 
 	onClick() {
@@ -41,8 +44,10 @@ export default class RectangleComponent extends React.Component {
 				x: dd.x,
 				y: dd.y
 			});
+			/*
 			this.props.item.set('x', dd.x);
 			this.props.item.set('y', dd.y);
+			*/
 		}
 
 	}
@@ -70,28 +75,33 @@ export default class RectangleComponent extends React.Component {
 
 	render() {
 		let {item} = this.props;
-		let width = 200;
+		let width = 100;
+		let height = 50;
+		let children = null;
+		let text = '';
+		if(typeof item == 'string') {
+			text = item;
+			width = 50
+			height = 25
+		}else{
+			children = item.slice(0, item.length).map((i, index) => {
+				return (<Node x={50 + index * 50} y={50} item={i}></Node>)
+			});
+		}
+
 		let transform = "translate("+(this.state.x-(width/2))+","+(this.state.y-50)+")";
 		let icon_transform = "translate("+(width-60)+","+(0)+")";
 		return (<g transform={transform}>
-			{item.render(this.state.nodeState)}
-	      {(item.shape == 'rect') ?
-	      (<rect onClick={this.onClick.bind(this)}
+			<rect width={width} height={height} style={{"fill":"rgb(255,255,250)","strokeWidth":3,"stroke":"rgb(0,0,0)"}}></rect>
+	      <rect onClick={this.onClick.bind(this)}
 	      		onMouseDown={this.onMouseDown.bind(this)}
 	      		onMouseEnter={this.onMouseEnter.bind(this)}
 	      		onMouseLeave={this.onMouseLeave.bind(this)}
 	      		onMouseMove={this.onMouseMove.bind(this)}
 	      		onMouseUp={this.onMouseUp.bind(this)}
-	      		width={width} height="100" style={{"opacity":0}} ></rect>)
-	  		: (<circle onClick={this.onClick.bind(this)}
-	      		onMouseDown={this.onMouseDown.bind(this)}
-	      		onMouseEnter={this.onMouseEnter.bind(this)}
-	      		onMouseLeave={this.onMouseLeave.bind(this)}
-	      		onMouseMove={this.onMouseMove.bind(this)}
-	      		onMouseUp={this.onMouseUp.bind(this)}
-	  			cx={35+(width/2)} cy={35+50} r="70" style={{"opacity":0}}></circle>)}
+	      		width={width} height={height} style={{"opacity":0}} ></rect>
   			<g transform={icon_transform}>
-	  		{!!item.getGraph()?(<g>
+	  		{!!item.graph?(<g>
 		      <rect x="0" y="0" width="60" height="20" style={{"fill":"#55e760","stroke":"#111","strokeWidth":1}} onClick={this.onFocus.bind(this)}></rect>
 		      <text x="6" y="17" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onFocus.bind(this)}>Focus</text>
 		      </g>):(<div/>)}
@@ -100,7 +110,8 @@ export default class RectangleComponent extends React.Component {
 		      		<text x="6" y="37" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onSend.bind(this)}>Send</text>
 		      	</g>
 	      	</g>
-		      <text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{item.name}</text>
+		      <text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
+		      {children}
 	      </g>)
 	}
 }
