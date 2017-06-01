@@ -10,7 +10,11 @@ export default class Editor extends React.Component {
 
 	render() {
 		let {tree} = this.props;
-		return (<svg width="600" height="500">
+		let browserSize = {
+		  width: window.innerWidth || document.body.clientWidth,
+		  height: window.innerHeight || document.body.clientHeight
+		}
+		return (<svg width={browserSize.width} height={browserSize.height}>
 					<g>
 						<Graph tree={tree}></Graph>
 					</g></svg>);

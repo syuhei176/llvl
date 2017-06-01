@@ -1,4 +1,4 @@
-export default class RectStr {
+export default class RecNum {
 
 	constructor(json) {
 		this.__data = json;
@@ -10,10 +10,6 @@ export default class RectStr {
 
 	evaluate() {
 		return this.__data;
-	}
-
-	setValue(v) {
-		this.__data = v;
 	}
 
 }
