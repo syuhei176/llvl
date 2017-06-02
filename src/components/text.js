@@ -1,7 +1,4 @@
 import React from 'react'
-import RectStr from '../syntax/string'
-import RecNum from '../syntax/number'
-import stringify from '../syntax/stringify'
 
 export default class CSText extends React.Component {
 	constructor(props) {
@@ -23,17 +20,6 @@ export default class CSText extends React.Component {
 		let children = null;
 		let text = '';
 		let evaluatable = false, hiddable = false;
-		if(item instanceof RectStr) {
-			text = item.__data
-			width = 50
-			height = 25
-		}else if(item instanceof RecNum) {
-			text = String(item.__data)
-			width = 50
-			height = 25
-		}else{
-			text = stringify(item)
-		}
 
 		let transform = "translate("+(this.state.x-(width/2))+","+(this.state.y-50)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";

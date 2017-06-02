@@ -1,8 +1,6 @@
 import React from 'react'
 import Point2D from 'point2d'
 import CSText from './text'
-import RectStr from '../syntax/string'
-import RectNum from '../syntax/number'
 
 const DRAG_NONE = 0;
 const DRAG_MOVE = 1;
@@ -11,8 +9,8 @@ export default class Node extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			x: props.x,
-			y: props.y,
+			x: props.item.node.x,
+			y: props.item.node.y,
 			nodeState:{},
 			hideChildren: false
 		}
@@ -44,10 +42,7 @@ export default class Node extends React.Component {
 				x: dd.x,
 				y: dd.y
 			});
-			/*
-			this.props.item.set('x', dd.x);
-			this.props.item.set('y', dd.y);
-			*/
+			this.props.item.node.setPos(dd.x, dd.y)
 		}
 
 	}
@@ -94,41 +89,14 @@ export default class Node extends React.Component {
 
 	render() {
 		let {item, depth} = this.props;
-		let width = 100 + item.getWidth();
-		let height = 50;
+		let width = 120;
+		let height = 60;
 		let children = null;
 		let text = '';
 		let evaluatable = false, hiddable = false;
-		if(item instanceof RectStr) {
 			text = item.__data
 			width = 50
 			height = 25
-		}else if(item instanceof RectNum) {
-			text = String(item.__data)
-			width = 50
-			height = 25
-		}else{
-			evaluatable = true;
-			hiddable = true;
-			//Nodeを隠す？
-			if(!this.state.hideChildren) {
-				//具象構文によってここを変更すべき
-				//head.__dataから関数を取り出し
-				let head = item.head;
-				if(head.__data == 'text') {
-					text = head.__data;
-					children = [
-						(<Node x={50} y={70} item={item.items[0]} depth={depth+1}></Node>),
-						(<CSText x={150} y={100} item={item.items[1]} depth={depth+1}></CSText>)
-					];
-				}else{
-					//CSMan.get(head.__data);
-					children = item.items.map((i, index) => {
-						return (<Node x={50 + index * 100} y={70} item={i} depth={depth+1}></Node>)
-					});
-				}
-			}
-		}
 
 		let transform = "translate("+(this.state.x-(width/2))+","+(this.state.y-50)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";

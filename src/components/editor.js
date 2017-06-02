@@ -16,7 +16,7 @@ export default class Editor extends React.Component {
 		}
 		return (<svg width={browserSize.width} height={browserSize.height}>
 					<g>
-						<Graph tree={tree}></Graph>
+						<Graph graph={tree}></Graph>
 					</g></svg>);
 		/*
 		return (<div><svg width="600" height="36"><g>

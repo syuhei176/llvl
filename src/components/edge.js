@@ -6,32 +6,22 @@ export default class Edge extends React.Component {
 	constructor(props) {
 		super(props)
 		this.state = {
-			src: props.item.src,
-			target: props.item.target
+			src: props.src.node,
+			target: props.target.node
 		}
-		props.item.src.on('change', (node) => {
+		props.target.node.on('change', (node) => {
 			this.setState({
-				src: {
-					x: node.x,
-					y: node.y
-				}
-			});
-		})
-		props.item.target.on('change', (node) => {
-			this.setState({
-				target: {
-					x: node.x,
-					y: node.y
-				}
+				target: node
 			});
 		})
 	}
 
 	render() {
 		let {src, target} = this.state;
-		let name = this.props.item.name;
-		let path = `M ${src.x} ${src.y} L ${target.x} ${target.y}`
-		let namePos = {x: src.x +(target.x - src.x) / 2, y: src.y +(target.y - src.y) / 2}
-		return (<g><path stroke="#333" strokeWidth="2" fill="none" d={path}/><text x={namePos.x} y={namePos.y}>{name}</text></g>)
+		let xx = target.x - src.x;
+		let yy = target.y - src.y;
+		let path = `M 0 0 L ${xx} ${yy}`
+		//let namePos = {x: src.x +(target.x - src.x) / 2, y: src.y +(target.y - src.y) / 2}
+		return (<g><path stroke="#333" strokeWidth="2" fill="none" d={path}/></g>)
 	}
 }
