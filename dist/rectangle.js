@@ -7230,14 +7230,6 @@ var Node = function (_React$Component) {
 			if (this.props.item.onEvalClicked) this.props.item.onEvalClicked();
 		}
 	}, {
-		key: 'onEdit',
-		value: function onEdit() {
-			var item = this.props.item;
-
-			var text = window.prompt('edit');
-			if (text && item.setValue) item.setValue(text);
-		}
-	}, {
 		key: 'render',
 		value: function render() {
 			var _props = this.props,
@@ -7291,12 +7283,6 @@ var Node = function (_React$Component) {
 						)
 					) : _react2.default.createElement('div', null)
 				),
-				_react2.default.createElement(
-					'text',
-					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
-					text
-				),
-				_react2.default.createElement('rect', { x: '36', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) }),
 				children
 			);
 		}
@@ -7344,6 +7330,7 @@ var ZooProcess = function () {
 		this.type = type;
 		this.graph = graph;
 		this.id = (0, _uuid2.default)();
+		this.settings = options.settings || {};
 		this.wires = [];
 		this.node = new _node2.default(options);
 		this.tuples = [];
@@ -7355,12 +7342,17 @@ var ZooProcess = function () {
 			return this.id;
 		}
 	}, {
+		key: 'setSettings',
+		value: function setSettings(settings) {
+			this.settings = settings;
+		}
+	}, {
 		key: 'receive',
 		value: function receive(event) {
 			var _this = this;
 
-			console.log('receive', event);
-			this.type.execute(event).then(function (result) {
+			console.log('receive', event, this.settings);
+			this.type.execute(event, this.settings).then(function (result) {
 				_this.send(result);
 			}).catch(function (err) {
 				console.error(err);
@@ -7374,11 +7366,6 @@ var ZooProcess = function () {
 			this.wires.forEach(function (processId) {
 				_this2.graph.getProcess(processId).receive(event);
 			});
-		}
-	}, {
-		key: 'execute',
-		value: function execute(args) {
-			return this.type.execute();
 		}
 	}, {
 		key: 'updateWires',
@@ -7435,8 +7422,8 @@ var ZooProcessType = function () {
 
 	_createClass(ZooProcessType, [{
 		key: "execute",
-		value: function execute(args) {
-			return this.fn(args);
+		value: function execute(args, settings) {
+			return this.fn(args, settings);
 		}
 	}]);
 
@@ -10664,10 +10651,24 @@ var Process = function (_Node) {
 	function Process(props) {
 		_classCallCheck(this, Process);
 
-		return _possibleConstructorReturn(this, (Process.__proto__ || Object.getPrototypeOf(Process)).call(this, props));
+		var _this = _possibleConstructorReturn(this, (Process.__proto__ || Object.getPrototypeOf(Process)).call(this, props));
+
+		_this.state.text = JSON.stringify(props.item.settings);
+		return _this;
 	}
 
 	_createClass(Process, [{
+		key: 'onEdit',
+		value: function onEdit() {
+			var item = this.props.item;
+
+			var text = window.prompt('edit', this.state.text);
+			if (text && item.setSettings) {
+				item.setSettings(JSON.parse(text));
+				this.setState({ text: text });
+			}
+		}
+	}, {
 		key: 'render',
 		value: function render() {
 			var _props = this.props,
@@ -10677,7 +10678,7 @@ var Process = function (_Node) {
 
 			var width = 180;
 			var height = 80;
-			var text = '';
+			var text = this.state.text;
 
 			var edges = item.wires.map(function (processId) {
 				return _react2.default.createElement(_edge2.default, { src: item, target: graph.getProcess(processId) });
@@ -10696,13 +10697,16 @@ var Process = function (_Node) {
 					onMouseMove: this.onMouseMove.bind(this),
 					onMouseUp: this.onMouseUp.bind(this),
 					width: width, height: height, style: { "opacity": 0 } }),
-				_react2.default.createElement('g', { transform: icon_transform }),
+				_react2.default.createElement(
+					'g',
+					{ transform: icon_transform },
+					_react2.default.createElement('rect', { x: '36', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) })
+				),
 				_react2.default.createElement(
 					'text',
 					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
 					text
 				),
-				_react2.default.createElement('rect', { x: '36', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) }),
 				edges
 			);
 		}
@@ -10908,7 +10912,6 @@ var UIParts = function (_Node) {
 					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
 					text
 				),
-				_react2.default.createElement('rect', { x: '36', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) }),
 				edges,
 				item.render(this.state.uiPartsState)
 			);
@@ -10953,11 +10956,11 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 module.exports = {
 	start: function start(id) {
 		var root = new _syntax2.default();
-		var p1 = root.addProcess('Car', { x: 100, y: 100 });
-		var p2 = root.addProcess('Cdr', { x: 120, y: 120 });
+		var change = root.addProcess('Change', { x: 100, y: 100, settings: { value: "event" } });
 		var button = root.addUIParts('Button', { x: 120, y: 120 });
 		var text = root.addUIParts('Text', { x: 240, y: 120 });
-		button.addWire(text.getId());
+		button.addWire(change.getId());
+		change.addWire(text.getId());
 
 		_reactDom2.default.render(_react2.default.createElement(_editor2.default, { tree: root }), document.getElementById(id));
 	}
@@ -11133,6 +11136,10 @@ var _cdr = __webpack_require__(107);
 
 var _cdr2 = _interopRequireDefault(_cdr);
 
+var _change = __webpack_require__(220);
+
+var _change2 = _interopRequireDefault(_change);
+
 var _button = __webpack_require__(109);
 
 var _button2 = _interopRequireDefault(_button);
@@ -11152,6 +11159,7 @@ var Registry = function () {
 		this.processTypes = [];
 		this.processTypes['Car'] = _car2.default;
 		this.processTypes['Cdr'] = _cdr2.default;
+		this.processTypes['Change'] = _change2.default;
 		this.processTypes['Button'] = new _button2.default();
 		this.processTypes['Text'] = new _text2.default();
 	}
@@ -24905,6 +24913,31 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
+
+/***/ }),
+/* 220 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+var _processType = __webpack_require__(59);
+
+var _processType2 = _interopRequireDefault(_processType);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+module.exports = new _processType2.default('change', function (message, settings) {
+
+	return new Promise(function (resolve, reject) {
+		if (settings.key) {
+			message[settings.key] = settings.value;
+		} else {
+			message = settings.value;
+		}
+		resolve(message);
+	});
+});
 
 /***/ })
 /******/ ]);

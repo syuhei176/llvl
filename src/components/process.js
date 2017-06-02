@@ -6,13 +6,24 @@ import Edge from './edge'
 export default class Process extends Node {
 	constructor(props) {
 		super(props)
+		this.state.text = JSON.stringify(props.item.settings);
+	}
+
+	onEdit() {
+		let {item} = this.props;
+		var text = window.prompt('edit', this.state.text);
+		if(text && item.setSettings) {
+			item.setSettings(JSON.parse(text));
+			this.setState({text:text})
+		}
+
 	}
 
 	render() {
 		let {graph, item, depth} = this.props;
 		let width = 180;
 		let height = 80;
-		let text = '';
+		let text = this.state.text;
 
 		let edges = item.wires.map((processId) => {
 			return (<Edge src={item} target={graph.getProcess(processId)}></Edge>)
@@ -30,9 +41,9 @@ export default class Process extends Node {
 	      		onMouseUp={this.onMouseUp.bind(this)}
 	      		width={width} height={height} style={{"opacity":0}} ></rect>
   			<g transform={icon_transform}>
+      		  <rect x="36" y="0" width="40" height="20" style={{"fill":"#5d67ef","stroke":"#111","strokeWidth":1}} onClick={this.onEdit.bind(this)}></rect>
 	      	</g>
 		      <text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
-      		  <rect x="36" y="0" width="40" height="20" style={{"fill":"#5d67ef","stroke":"#111","strokeWidth":1}} onClick={this.onEdit.bind(this)}></rect>
       		  {edges}
 	      </g>)
 	}

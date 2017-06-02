@@ -80,13 +80,6 @@ export default class Node extends React.Component {
 		if(this.props.item.onEvalClicked) this.props.item.onEvalClicked();
 	}
 
-	onEdit() {
-		let {item} = this.props;
-		var text = window.prompt('edit');
-		if(text && item.setValue)
-			item.setValue(text);
-	}
-
 	render() {
 		let {item, depth} = this.props;
 		let width = 120;
@@ -123,8 +116,6 @@ export default class Node extends React.Component {
 		      	</g>):(<div/>)
 		      	}
 	      	</g>
-		      <text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
-      		  <rect x="36" y="0" width="40" height="20" style={{"fill":"#5d67ef","stroke":"#111","strokeWidth":1}} onClick={this.onEdit.bind(this)}></rect>
 		      {children}
 	      </g>)
 	}

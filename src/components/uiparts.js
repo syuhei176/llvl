@@ -38,7 +38,6 @@ export default class UIParts extends Node {
   			<g transform={icon_transform}>
 	      	</g>
 		      <text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
-      		  <rect x="36" y="0" width="40" height="20" style={{"fill":"#5d67ef","stroke":"#111","strokeWidth":1}} onClick={this.onEdit.bind(this)}></rect>
       		  {edges}
       		  {item.render(this.state.uiPartsState)}
 	      </g>)

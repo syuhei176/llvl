@@ -5,8 +5,8 @@ export default class ZooProcessType {
 		this.fn = fn;
 	}
 
-	execute(args) {
-		return this.fn(args);
+	execute(args, settings) {
+		return this.fn(args, settings);
 	}
 
 }

@@ -14,12 +14,11 @@ import sample from './sample'
 module.exports = {
 	start: function(id) {
 		let root = new SyntaxRoot();
-		let p1 = root.addProcess('Car', {x:100, y:100})
-		let p2 = root.addProcess('Cdr', {x:120, y:120})
+		let change = root.addProcess('Change', {x:100, y:100, settings:{value:"event"}})
 		let button = root.addUIParts('Button', {x:120, y:120})
 		let text = root.addUIParts('Text', {x:240, y:120})
-		button.addWire(text.getId())
-		//p1.addWire(text.getId())
+		button.addWire(change.getId())
+		change.addWire(text.getId())
 		//addSubFlow
 		//addTrigger
 		//addActuator

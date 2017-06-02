@@ -11,6 +11,7 @@ export default class ZooProcess {
 		this.type = type;
 		this.graph = graph;
 		this.id = UUID();
+		this.settings = options.settings || {};
 		this.wires = [];
 		this.node = new ZooNode(options);
 		this.tuples = [];
@@ -20,9 +21,13 @@ export default class ZooProcess {
 		return this.id;
 	}
 
+	setSettings(settings) {
+		this.settings = settings;
+	}
+
 	receive(event) {
-		console.log('receive', event);
-		this.type.execute(event).then((result)=>{
+		console.log('receive', event, this.settings);
+		this.type.execute(event, this.settings).then((result)=>{
 			this.send(result);
 		}).catch((err)=>{
 			console.error(err);
@@ -33,10 +38,6 @@ export default class ZooProcess {
 		this.wires.forEach((processId)=>{
 			this.graph.getProcess(processId).receive(event);
 		});
-	}
-
-	execute(args) {
-		return this.type.execute();
 	}
 
 	updateWires(wires) {
