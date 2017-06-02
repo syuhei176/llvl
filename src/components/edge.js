@@ -19,8 +19,8 @@ export default class Edge extends React.Component {
 	render() {
 		let {src, target} = this.state;
 		let xx = target.x - src.x;
-		let yy = target.y - src.y;
-		let path = `M 0 0 L ${xx} ${yy}`
+		let yy = (target.y+30) - src.y;
+		let path = `M 160 30 L ${xx} ${yy}`
 		//let namePos = {x: src.x +(target.x - src.x) / 2, y: src.y +(target.y - src.y) / 2}
 		return (<g><path stroke="#333" strokeWidth="2" fill="none" d={path}/></g>)
 	}

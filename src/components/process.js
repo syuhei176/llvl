@@ -21,8 +21,8 @@ export default class Process extends Node {
 
 	render() {
 		let {graph, item, depth} = this.props;
-		let width = 180;
-		let height = 80;
+		let width = 160;
+		let height = 60;
 		let text = this.state.text;
 
 		let edges = item.wires.map((processId) => {

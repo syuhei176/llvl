@@ -9,6 +9,6 @@ export default class ZooUIText extends ZooUIPartsType {
 	}
 
 	render(uipartObject, state) {
-		return (<text onClick={uipartObject.send.bind(uipartObject)}>{JSON.stringify(state)}</text>)
+		return (<text y="20" onClick={uipartObject.send.bind(uipartObject)}>{JSON.stringify(state)}</text>)
 	}
 }

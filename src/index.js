@@ -14,21 +14,11 @@ import sample from './sample'
 module.exports = {
 	start: function(id) {
 		let root = new SyntaxRoot();
-		let change = root.addProcess('Change', {x:100, y:100, settings:{value:"event"}})
-		let button = root.addUIParts('Button', {x:120, y:120})
-		let text = root.addUIParts('Text', {x:240, y:120})
+		let change = root.addProcess('Change', {x:300, y:100, settings:{value:"event"}})
+		let button = root.addUIParts('Button', {x:100, y:100})
+		let text = root.addUIParts('Text', {x:500, y:100})
 		button.addWire(change.getId())
 		change.addWire(text.getId())
-		//addSubFlow
-		//addTrigger
-		//addActuator
-		//addUIParts
-		//addScreen
-		//addStore
-		//addInstantiator
-		//addObject
-		//addSTM
-		//addState
 		ReactDOM.render(
 		  <Editor tree={root}/>,
 		  document.getElementById(id)
