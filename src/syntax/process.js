@@ -35,8 +35,8 @@ export default class ZooProcess {
 	}
 
 	send(event) {
-		this.wires.forEach((processId)=>{
-			this.graph.getProcess(processId).receive(event);
+		this.wires.forEach((zooProcess)=>{
+			zooProcess.receive(event);
 		});
 	}
 
@@ -44,12 +44,12 @@ export default class ZooProcess {
 		this.wires = wires;
 	}
 
-	addWire(processId) {
-		this.wires.push(processId);
+	addWire(zooProcess) {
+		this.wires.push(zooProcess);
 	}
 
-	removeWire(processId) {
-		let index = this.wires.indexOf(processId);
+	removeWire(zooProcess) {
+		let index = this.wires.indexOf(zooProcess);
 		this.wires.splice(index, 1);
 	}
 

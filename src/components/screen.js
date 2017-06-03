@@ -3,7 +3,7 @@ import Node from './node'
 import Edge from './edge'
 
 
-export default class Process extends Node {
+export default class Screen extends Node {
 	constructor(props) {
 		super(props)
 		this.state.text = JSON.stringify(props.item.settings);
@@ -21,11 +21,11 @@ export default class Process extends Node {
 
 	render() {
 		let {graph, item, depth} = this.props;
-		let width = 160;
-		let height = 60;
+		let width = 120;
+		let height = 160;
 		let text = this.state.text;
 
-		let edges = item.wires.map((target) => {
+		let transitions = item.transitions.map((target) => {
 			return (<Edge src={item} target={target}></Edge>)
 		});
 
@@ -44,20 +44,7 @@ export default class Process extends Node {
       		  <rect x="0" y="0" width="40" height="20" style={{"fill":"#5d67ef","stroke":"#111","strokeWidth":1}} onClick={this.onEdit.bind(this)}></rect>
 	      	</g>
 		      <text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
-      		  {edges}
+      		  {transitions}
 	      </g>)
 	}
 }
-
-/*
-
-	  		{!!item.graph?(<g>
-		      <rect x="0" y="0" width="60" height="20" style={{"fill":"#55e760","stroke":"#111","strokeWidth":1}} onClick={this.onFocus.bind(this)}></rect>
-		      <text x="6" y="17" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onFocus.bind(this)}>Focus</text>
-		      </g>):(<div/>)}
-	  			<g>
-		      		<rect x="0" y="20" width="60" height="20" style={{"fill":"#5a60ef","stroke":"#111","strokeWidth":1}} onClick={this.onSend.bind(this)}></rect>
-		      		<text x="6" y="37" fill="#fff" style={{"fontSize":"12px"}} onClick={this.onSend.bind(this)}>Send</text>
-		      	</g>
-
-*/

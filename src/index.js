@@ -17,8 +17,16 @@ module.exports = {
 		let change = root.addProcess('Change', {x:300, y:100, settings:{value:"event"}})
 		let button = root.addUIParts('Button', {x:100, y:100})
 		let text = root.addUIParts('Text', {x:500, y:100})
-		button.addWire(change.getId())
-		change.addWire(text.getId())
+		//Screen Transition Diagram
+		let std = root.createSTD({x:180, y:270});
+		let screen1 = root.createScreen({x:100, y:100});
+		let screen2 = root.createScreen({x:300, y:100});
+		std.addScreen(screen1);
+		std.addScreen(screen2);
+		screen1.addUIParts(button);
+		screen2.addUIParts(text);
+		button.addWire(change)
+		change.addWire(text)
 		ReactDOM.render(
 		  <Editor tree={root}/>,
 		  document.getElementById(id)

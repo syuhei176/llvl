@@ -7397,10 +7397,8 @@ var ZooProcess = function () {
 	}, {
 		key: 'send',
 		value: function send(event) {
-			var _this2 = this;
-
-			this.wires.forEach(function (processId) {
-				_this2.graph.getProcess(processId).receive(event);
+			this.wires.forEach(function (zooProcess) {
+				zooProcess.receive(event);
 			});
 		}
 	}, {
@@ -7410,13 +7408,13 @@ var ZooProcess = function () {
 		}
 	}, {
 		key: 'addWire',
-		value: function addWire(processId) {
-			this.wires.push(processId);
+		value: function addWire(zooProcess) {
+			this.wires.push(zooProcess);
 		}
 	}, {
 		key: 'removeWire',
-		value: function removeWire(processId) {
-			var index = this.wires.indexOf(processId);
+		value: function removeWire(zooProcess) {
+			var index = this.wires.indexOf(zooProcess);
 			this.wires.splice(index, 1);
 		}
 	}, {
@@ -10483,6 +10481,14 @@ var _uiparts = __webpack_require__(112);
 
 var _uiparts2 = _interopRequireDefault(_uiparts);
 
+var _std = __webpack_require__(222);
+
+var _std2 = _interopRequireDefault(_std);
+
+var _screen = __webpack_require__(221);
+
+var _screen2 = _interopRequireDefault(_screen);
+
 var _registry = __webpack_require__(109);
 
 var _registry2 = _interopRequireDefault(_registry);
@@ -10500,6 +10506,8 @@ var Syntax = function () {
 		this.processes = [];
 
 		this.objects = [];
+		this.stds = [];
+		this.screens = [];
 	}
 
 	_createClass(Syntax, [{
@@ -10517,6 +10525,20 @@ var Syntax = function () {
 			var newUIParts = new _uiparts2.default(type, this, options);
 			this.processes.push(newUIParts);
 			return newUIParts;
+		}
+	}, {
+		key: 'createSTD',
+		value: function createSTD(options) {
+			var std = new _std2.default({}, this, options);
+			this.stds.push(std);
+			return std;
+		}
+	}, {
+		key: 'createScreen',
+		value: function createScreen(options) {
+			var screen = new _screen2.default(options);
+			this.screens.push(screen);
+			return screen;
 		}
 	}, {
 		key: 'getProcess',
@@ -10568,6 +10590,10 @@ var _uiparts = __webpack_require__(101);
 
 var _uiparts2 = _interopRequireDefault(_uiparts);
 
+var _std = __webpack_require__(223);
+
+var _std2 = _interopRequireDefault(_std);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10598,9 +10624,14 @@ var Graph = function (_React$Component) {
 					return _react2.default.createElement(_uiparts2.default, { x: 100, y: 100, graph: _this2.props.graph, item: item, depth: 1 });
 				}
 			});
+			var stds = this.props.graph.stds.map(function (item) {
+				var className = item.constructor.name;
+				return _react2.default.createElement(_std2.default, { x: 100, y: 100, graph: _this2.props.graph, item: item, depth: 1 });
+			});
 			return _react2.default.createElement(
 				'g',
 				null,
+				stds,
 				nodes
 			);
 		}
@@ -10680,8 +10711,8 @@ var Process = function (_Node) {
 			var height = 60;
 			var text = this.state.text;
 
-			var edges = item.wires.map(function (processId) {
-				return _react2.default.createElement(_edge2.default, { src: item, target: graph.getProcess(processId) });
+			var edges = item.wires.map(function (target) {
+				return _react2.default.createElement(_edge2.default, { src: item, target: target });
 			});
 
 			var transform = "translate(" + (this.state.x - width / 2) + "," + (this.state.y - 50) + ")";
@@ -10700,7 +10731,7 @@ var Process = function (_Node) {
 				_react2.default.createElement(
 					'g',
 					{ transform: icon_transform },
-					_react2.default.createElement('rect', { x: '36', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) })
+					_react2.default.createElement('rect', { x: '0', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) })
 				),
 				_react2.default.createElement(
 					'text',
@@ -10889,8 +10920,8 @@ var UIParts = function (_Node) {
 			var height = 60;
 			var text = '';
 
-			var edges = item.wires.map(function (processId, index) {
-				return _react2.default.createElement(_edge2.default, { key: 'edge-' + index, src: item, target: graph.getProcess(processId) });
+			var edges = item.wires.map(function (target, index) {
+				return _react2.default.createElement(_edge2.default, { key: 'edge-' + index, src: item, target: target });
 			});
 
 			var transform = "translate(" + (this.state.x - width / 2) + "," + (this.state.y - 50) + ")";
@@ -10959,8 +10990,16 @@ module.exports = {
 		var change = root.addProcess('Change', { x: 300, y: 100, settings: { value: "event" } });
 		var button = root.addUIParts('Button', { x: 100, y: 100 });
 		var text = root.addUIParts('Text', { x: 500, y: 100 });
-		button.addWire(change.getId());
-		change.addWire(text.getId());
+
+		var std = root.createSTD({ x: 180, y: 270 });
+		var screen1 = root.createScreen({ x: 100, y: 100 });
+		var screen2 = root.createScreen({ x: 300, y: 100 });
+		std.addScreen(screen1);
+		std.addScreen(screen2);
+		screen1.addUIParts(button);
+		screen2.addUIParts(text);
+		button.addWire(change);
+		change.addWire(text);
 		_reactDom2.default.render(_react2.default.createElement(_editor2.default, { tree: root }), document.getElementById(id));
 	}
 };
@@ -24937,6 +24976,325 @@ function isUndefined(arg) {
   return arg === void 0;
 }
 
+
+/***/ }),
+/* 221 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _node = __webpack_require__(103);
+
+var _node2 = _interopRequireDefault(_node);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ZooScreen = function () {
+	function ZooScreen(options) {
+		_classCallCheck(this, ZooScreen);
+
+		this.uiparts = [];
+		this.transitions = [];
+		this.node = new _node2.default(options);
+	}
+
+	_createClass(ZooScreen, [{
+		key: 'addUIParts',
+		value: function addUIParts(uipart) {
+			this.uiparts.push(uipart);
+		}
+	}, {
+		key: 'addTransition',
+		value: function addTransition(stateId) {
+			this.transitions.push(stateId);
+		}
+	}]);
+
+	return ZooScreen;
+}();
+
+exports.default = ZooScreen;
+module.exports = exports['default'];
+
+/***/ }),
+/* 222 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _process = __webpack_require__(59);
+
+var _process2 = _interopRequireDefault(_process);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ZooSTD = function (_ZooProcess) {
+	_inherits(ZooSTD, _ZooProcess);
+
+	function ZooSTD(type, graph, options) {
+		_classCallCheck(this, ZooSTD);
+
+		var _this = _possibleConstructorReturn(this, (ZooSTD.__proto__ || Object.getPrototypeOf(ZooSTD)).call(this, type, graph, options));
+
+		_this.currentScreen = null;
+		_this.screens = [];
+		return _this;
+	}
+
+	_createClass(ZooSTD, [{
+		key: 'addScreen',
+		value: function addScreen(screen) {
+			this.screens.push(screen);
+		}
+	}]);
+
+	return ZooSTD;
+}(_process2.default);
+
+exports.default = ZooSTD;
+module.exports = exports['default'];
+
+/***/ }),
+/* 223 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _node = __webpack_require__(58);
+
+var _node2 = _interopRequireDefault(_node);
+
+var _edge = __webpack_require__(57);
+
+var _edge2 = _interopRequireDefault(_edge);
+
+var _screen = __webpack_require__(224);
+
+var _screen2 = _interopRequireDefault(_screen);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ScreenTransitionDiagram = function (_Node) {
+	_inherits(ScreenTransitionDiagram, _Node);
+
+	function ScreenTransitionDiagram(props) {
+		_classCallCheck(this, ScreenTransitionDiagram);
+
+		var _this = _possibleConstructorReturn(this, (ScreenTransitionDiagram.__proto__ || Object.getPrototypeOf(ScreenTransitionDiagram)).call(this, props));
+
+		_this.state.text = JSON.stringify(props.item.settings);
+		return _this;
+	}
+
+	_createClass(ScreenTransitionDiagram, [{
+		key: 'onEdit',
+		value: function onEdit() {
+			var item = this.props.item;
+
+			var text = window.prompt('edit', this.state.text);
+			if (text && item.setSettings) {
+				item.setSettings(JSON.parse(text));
+				this.setState({ text: text });
+			}
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _props = this.props,
+			    graph = _props.graph,
+			    item = _props.item,
+			    depth = _props.depth;
+
+			var width = 300;
+			var height = 200;
+			var text = this.state.text;
+
+			var screens = item.screens.map(function (item) {
+				return _react2.default.createElement(_screen2.default, { x: 100, y: 100, graph: graph, item: item, depth: 1 });
+			});
+			var edges = item.wires.map(function (processId) {
+				return _react2.default.createElement(_edge2.default, { src: item, target: graph.getProcess(processId) });
+			});
+
+			var transform = "translate(" + (this.state.x - width / 2) + "," + (this.state.y - 50) + ")";
+			var icon_transform = "translate(" + (width - 40) + "," + 0 + ")";
+			return _react2.default.createElement(
+				'g',
+				{ transform: transform },
+				_react2.default.createElement('rect', { width: width, height: height, style: { "fill": "rgb(255,255,250)", "strokeWidth": 1, "stroke": "rgb(0,0,0)" } }),
+				_react2.default.createElement('rect', { onClick: this.onClick.bind(this),
+					onMouseDown: this.onMouseDown.bind(this),
+					onMouseEnter: this.onMouseEnter.bind(this),
+					onMouseLeave: this.onMouseLeave.bind(this),
+					onMouseMove: this.onMouseMove.bind(this),
+					onMouseUp: this.onMouseUp.bind(this),
+					width: width, height: height, style: { "opacity": 0 } }),
+				_react2.default.createElement(
+					'g',
+					{ transform: icon_transform },
+					_react2.default.createElement('rect', { x: '0', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) })
+				),
+				_react2.default.createElement(
+					'text',
+					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
+					text
+				),
+				screens,
+				edges
+			);
+		}
+	}]);
+
+	return ScreenTransitionDiagram;
+}(_node2.default);
+
+exports.default = ScreenTransitionDiagram;
+module.exports = exports['default'];
+
+/***/ }),
+/* 224 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(10);
+
+var _react2 = _interopRequireDefault(_react);
+
+var _node = __webpack_require__(58);
+
+var _node2 = _interopRequireDefault(_node);
+
+var _edge = __webpack_require__(57);
+
+var _edge2 = _interopRequireDefault(_edge);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Screen = function (_Node) {
+	_inherits(Screen, _Node);
+
+	function Screen(props) {
+		_classCallCheck(this, Screen);
+
+		var _this = _possibleConstructorReturn(this, (Screen.__proto__ || Object.getPrototypeOf(Screen)).call(this, props));
+
+		_this.state.text = JSON.stringify(props.item.settings);
+		return _this;
+	}
+
+	_createClass(Screen, [{
+		key: 'onEdit',
+		value: function onEdit() {
+			var item = this.props.item;
+
+			var text = window.prompt('edit', this.state.text);
+			if (text && item.setSettings) {
+				item.setSettings(JSON.parse(text));
+				this.setState({ text: text });
+			}
+		}
+	}, {
+		key: 'render',
+		value: function render() {
+			var _props = this.props,
+			    graph = _props.graph,
+			    item = _props.item,
+			    depth = _props.depth;
+
+			var width = 120;
+			var height = 160;
+			var text = this.state.text;
+
+			var transitions = item.transitions.map(function (target) {
+				return _react2.default.createElement(_edge2.default, { src: item, target: target });
+			});
+
+			var transform = "translate(" + (this.state.x - width / 2) + "," + (this.state.y - 50) + ")";
+			var icon_transform = "translate(" + (width - 40) + "," + 0 + ")";
+			return _react2.default.createElement(
+				'g',
+				{ transform: transform },
+				_react2.default.createElement('rect', { width: width, height: height, style: { "fill": "rgb(255,255,250)", "strokeWidth": 1, "stroke": "rgb(0,0,0)" } }),
+				_react2.default.createElement('rect', { onClick: this.onClick.bind(this),
+					onMouseDown: this.onMouseDown.bind(this),
+					onMouseEnter: this.onMouseEnter.bind(this),
+					onMouseLeave: this.onMouseLeave.bind(this),
+					onMouseMove: this.onMouseMove.bind(this),
+					onMouseUp: this.onMouseUp.bind(this),
+					width: width, height: height, style: { "opacity": 0 } }),
+				_react2.default.createElement(
+					'g',
+					{ transform: icon_transform },
+					_react2.default.createElement('rect', { x: '0', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) })
+				),
+				_react2.default.createElement(
+					'text',
+					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
+					text
+				),
+				transitions
+			);
+		}
+	}]);
+
+	return Screen;
+}(_node2.default);
+
+exports.default = Screen;
+module.exports = exports['default'];
 
 /***/ })
 /******/ ]);

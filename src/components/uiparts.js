@@ -20,8 +20,8 @@ export default class UIParts extends Node {
 		let height = 60;
 		let text = '';
 
-		let edges = item.wires.map((processId, index) => {
-			return (<Edge key={'edge-'+index} src={item} target={graph.getProcess(processId)}></Edge>)
+		let edges = item.wires.map((target, index) => {
+			return (<Edge key={'edge-'+index} src={item} target={target}></Edge>)
 		});
 
 		let transform = "translate("+(this.state.x-(width/2))+","+(this.state.y-50)+")";

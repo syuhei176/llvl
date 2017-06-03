@@ -8,6 +8,8 @@
 import ZooProcess from './process'
 import ZooObject from './object'
 import ZooUIParts from './uiparts'
+import ZooSTD from './std'
+import ZooScreen from './screen'
 import Registry from './type/registry'
 
 export default class Syntax {
@@ -18,6 +20,8 @@ export default class Syntax {
 		this.processes = [];
 		// has state
 		this.objects = [];
+		this.stds = [];
+		this.screens = [];
 	}
 
 	addProcess(typeName, options) {
@@ -33,7 +37,18 @@ export default class Syntax {
 		this.processes.push(newUIParts);
 		return newUIParts;
 	}
-	
+
+	createSTD(options) {
+		let std = new ZooSTD({}, this, options);
+		this.stds.push(std)
+		return std
+	}
+
+	createScreen(options) {
+		let screen = new ZooScreen(options);
+		this.screens.push(screen);
+		return screen;
+	}
 
 	getProcess(id) {
 		return this.processes.filter((process)=>{return process.getId() == id;})[0];
