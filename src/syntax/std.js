@@ -9,6 +9,20 @@ export default class ZooSTD extends ZooProcess {
 	}
 	
 	addScreen(screen) {
+		//nodeの親子設定
+		screen.node.parent = this.node;
 		this.screens.push(screen);
+		this.currentScreen = screen;
 	}
+
+	receive(event) {
+		console.log('receive', this.currentScreen, event);
+		let nextScreen = this.currentScreen.getNextScreen(event);
+		console.log('nextScreen', nextScreen)
+		if(nextScreen) {
+			this.currentScreen = nextScreen.screen;
+			this.emit('change', this);
+		}
+	}
+
 }

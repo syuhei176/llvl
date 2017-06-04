@@ -22,19 +22,20 @@ export default class ScreenTransitionDiagram extends Node {
 
 	render() {
 		let {graph, item, depth} = this.props;
-		let width = 300;
+		let width = 360;
 		let height = 200;
 		let text = this.state.text;
+		let absolutlyPos = item.node.getAPos();
 
-		let screens = item.screens.map((item) => {
-			return (<Screen x={100} y={100} graph={graph} item={item} depth={1}></Screen>)
+		let screens = item.screens.map((screen) => {
+			const isCurrent = item.currentScreen?(item.currentScreen.getId() == screen.getId()):false;
+			return (<Screen x={100} y={100} graph={graph} item={screen} isCurrent={isCurrent}></Screen>)
 		});
 		let edges = item.wires.map((processId) => {
 			return (<Edge src={item} target={graph.getProcess(processId)}></Edge>)
 		});
 
-
-		let transform = "translate("+(this.state.x-(width/2))+","+(this.state.y-50)+")";
+		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";
 		return (<g transform={transform}>
 			<rect width={width} height={height} style={{"fill":"rgb(255,255,250)","strokeWidth":1,"stroke":"rgb(0,0,0)"}}></rect>
@@ -50,6 +51,7 @@ export default class ScreenTransitionDiagram extends Node {
 	      	</g>
 		      <text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
       		  {screens}{edges}
+	      	  <text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>
 	      </g>)
 	}
 }

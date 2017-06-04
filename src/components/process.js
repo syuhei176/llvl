@@ -24,12 +24,13 @@ export default class Process extends Node {
 		let width = 160;
 		let height = 60;
 		let text = this.state.text;
+		let absolutlyPos = item.node.getAPos();
 
 		let edges = item.wires.map((target) => {
 			return (<Edge src={item} target={target}></Edge>)
 		});
 
-		let transform = "translate("+(this.state.x-(width/2))+","+(this.state.y-50)+")";
+		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";
 		return (<g transform={transform}>
 			<rect width={width} height={height} style={{"fill":"rgb(255,255,250)","strokeWidth":1,"stroke":"rgb(0,0,0)"}}></rect>
@@ -45,6 +46,7 @@ export default class Process extends Node {
 	      	</g>
 		      <text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
       		  {edges}
+	      		<text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>
 	      </g>)
 	}
 }

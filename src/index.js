@@ -14,13 +14,16 @@ import sample from './sample'
 module.exports = {
 	start: function(id) {
 		let root = new SyntaxRoot();
-		let change = root.addProcess('Change', {x:300, y:100, settings:{value:"event"}})
-		let button = root.addUIParts('Button', {x:100, y:100})
-		let text = root.addUIParts('Text', {x:500, y:100})
+		let change = root.addProcess('Change', {x:200, y:100, settings:{value:"buttonClick"}})
+		let button = root.createUIParts('Button', {x:20, y:100})
+		let text = root.createUIParts('Text', {x:20, y:100})
 		//Screen Transition Diagram
-		let std = root.createSTD({x:180, y:270});
-		let screen1 = root.createScreen({x:100, y:100});
-		let screen2 = root.createScreen({x:300, y:100});
+		let std = root.createSTD({x:100, y:200});
+		let screen1 = root.createScreen({x:20, y:30});
+		let screen2 = root.createScreen({x:220, y:30});
+		screen1.addTransition('buttonClick', screen2);
+		screen2.addTransition('buttonClick', screen1);
+		change.addWire(std);
 		std.addScreen(screen1);
 		std.addScreen(screen2);
 		screen1.addUIParts(button);

@@ -19,12 +19,13 @@ export default class UIParts extends Node {
 		let width = 160;
 		let height = 60;
 		let text = '';
+		let absolutlyPos = item.node.getAPos();
 
 		let edges = item.wires.map((target, index) => {
 			return (<Edge key={'edge-'+index} src={item} target={target}></Edge>)
 		});
 
-		let transform = "translate("+(this.state.x-(width/2))+","+(this.state.y-50)+")";
+		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		let icon_transform = "translate("+(20)+","+(20)+")";
 		return (<g transform={transform}>
 			<rect width={width} height={height} style={{"fill":"rgb(255,255,250)","strokeWidth":1,"stroke":"rgb(0,0,0)"}}></rect>
@@ -40,6 +41,7 @@ export default class UIParts extends Node {
 				<g transform={icon_transform}>
 				</g>
 					{item.render(this.state.uiPartsState)}
+	      		<text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>
 	      </g>)
 	}
 }

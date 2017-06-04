@@ -31,9 +31,14 @@ export default class Syntax {
 		return newProcess;
 	}
 
-	addUIParts(typeName, options) {
+	createUIParts(typeName, options) {
 		let type = this.registry.get(typeName);
 		let newUIParts = new ZooUIParts(type, this, options);
+		return newUIParts;
+	}
+
+	addUIParts(typeName, options) {
+		let newUIParts = this.createUIParts(typeName, options);
 		this.processes.push(newUIParts);
 		return newUIParts;
 	}
@@ -45,7 +50,7 @@ export default class Syntax {
 	}
 
 	createScreen(options) {
-		let screen = new ZooScreen(options);
+		let screen = new ZooScreen(this, options);
 		this.screens.push(screen);
 		return screen;
 	}

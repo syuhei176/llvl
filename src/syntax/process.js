@@ -1,3 +1,4 @@
+import {EventEmitter} from 'events';
 import UUID from 'uuid'
 import ZooNode from './node'
 import Tuple from './tuple'
@@ -5,9 +6,10 @@ import Tuple from './tuple'
 /*
  lisp的に色々置けるようにする
 */
-export default class ZooProcess {
+export default class ZooProcess extends EventEmitter {
 
 	constructor(type, graph, options) {
+		super();
 		this.type = type;
 		this.graph = graph;
 		this.id = UUID();

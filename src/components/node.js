@@ -90,6 +90,7 @@ export default class Node extends React.Component {
 			text = item.__data
 			width = 50
 			height = 25
+		let absolutlyPos = item.node.getAPos();
 
 		let transform = "translate("+(this.state.x-(width/2))+","+(this.state.y-50)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";
@@ -116,6 +117,7 @@ export default class Node extends React.Component {
 		      	</g>):(<div/>)
 		      	}
 	      	</g>
+	      		<text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>
 		      {children}
 	      </g>)
 	}
