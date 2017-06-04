@@ -8,6 +8,12 @@ export default class ScreenTransitionDiagram extends Node {
 	constructor(props) {
 		super(props)
 		this.state.text = JSON.stringify(props.item.settings);
+		props.item.on('change', (item)=>{
+			console.log(item)
+			this.setState({
+				item: item
+			})
+		})
 	}
 
 	onEdit() {
@@ -22,13 +28,14 @@ export default class ScreenTransitionDiagram extends Node {
 
 	render() {
 		let {graph, item, depth} = this.props;
+		let stdItem = this.state.item || item;
 		let width = 360;
 		let height = 200;
 		let text = this.state.text;
 		let absolutlyPos = item.node.getAPos();
 
 		let screens = item.screens.map((screen) => {
-			const isCurrent = item.currentScreen?(item.currentScreen.getId() == screen.getId()):false;
+			const isCurrent = stdItem.currentScreen?(stdItem.currentScreen.getId() == screen.getId()):false;
 			return (<Screen x={100} y={100} graph={graph} item={screen} isCurrent={isCurrent}></Screen>)
 		});
 		let edges = item.wires.map((processId) => {
