@@ -41,7 +41,11 @@ export default class Screen extends React.Component {
 					width={width}
 					height={height}
 					stroke={(isCurrent?"rgb(10,150,10)":"rgb(0,0,0)")}
-					node={item.node}>{uiparts}{transitions}</Node>)
+					node={item.node}>
+						<text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
+						{uiparts}
+						{transitions}
+						</Node>)
 	}
 }
 

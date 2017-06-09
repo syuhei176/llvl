@@ -17,7 +17,7 @@ export default class ZooScreen {
 
 	addUIParts(uiparts) {
 		//nodeの親子設定
-		uiparts.node.parent = this.node;
+		uiparts.node.setParent(this.node)
 		//
 		this.uiparts.push(uiparts);
 	}

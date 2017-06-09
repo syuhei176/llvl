@@ -16,6 +16,13 @@ export default class ZooNode extends EventEmitter {
 		this.emit('change', this);
 	}
 
+	setParent(parent) {
+		this.parent = parent;
+		this.parent.on('change', ()=>{
+			this.emit('change', this);
+		})
+	}
+
 	getAPos(x, y) {
 		if(this.parent) {
 			let parentPos = this.parent.getAPos();

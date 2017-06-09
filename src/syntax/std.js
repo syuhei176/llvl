@@ -10,7 +10,7 @@ export default class ZooSTD extends ZooProcess {
 	
 	addScreen(screen) {
 		//nodeの親子設定
-		screen.node.parent = this.node;
+		screen.node.setParent(this.node)
 		this.screens.push(screen);
 		this.currentScreen = screen;
 	}

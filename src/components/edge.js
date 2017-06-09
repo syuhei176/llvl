@@ -9,6 +9,11 @@ export default class Edge extends React.Component {
 			src: props.src.node,
 			target: props.target.node
 		}
+		props.src.node.on('change', (node) => {
+			this.setState({
+				src: node
+			});
+		})
 		props.target.node.on('change', (node) => {
 			this.setState({
 				target: node

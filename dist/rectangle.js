@@ -3625,6 +3625,11 @@ var Edge = function (_React$Component) {
 			src: props.src.node,
 			target: props.target.node
 		};
+		props.src.node.on('change', function (node) {
+			_this.setState({
+				src: node
+			});
+		});
 		props.target.node.on('change', function (node) {
 			_this.setState({
 				target: node
@@ -3798,6 +3803,7 @@ var Node = function (_React$Component) {
 			var evaluatable = false,
 			    hiddable = false;
 			var absolutlyPos = node.getAPos();
+			var showAbsolutlyPosition = false;
 
 			var transform = "translate(" + this.state.x + "," + this.state.y + ")";
 			return _react2.default.createElement(
@@ -3811,11 +3817,11 @@ var Node = function (_React$Component) {
 					onMouseMove: this.onMouseMove.bind(this),
 					onMouseUp: this.onMouseUp.bind(this),
 					width: width, height: height, style: { "opacity": 0 } }),
-				_react2.default.createElement(
+				showAbsolutlyPosition ? _react2.default.createElement(
 					'text',
 					null,
 					'(' + absolutlyPos.x + ', ' + absolutlyPos.y + ')'
-				),
+				) : _react2.default.createElement('div', null),
 				children
 			);
 		}
@@ -7559,6 +7565,16 @@ var ZooNode = function (_EventEmitter) {
 			this.x = x;
 			this.y = y;
 			this.emit('change', this);
+		}
+	}, {
+		key: 'setParent',
+		value: function setParent(parent) {
+			var _this2 = this;
+
+			this.parent = parent;
+			this.parent.on('change', function () {
+				_this2.emit('change', _this2);
+			});
 		}
 	}, {
 		key: 'getAPos',
@@ -11314,6 +11330,11 @@ var Screen = function (_React$Component) {
 					height: height,
 					stroke: isCurrent ? "rgb(10,150,10)" : "rgb(0,0,0)",
 					node: item.node },
+				_react2.default.createElement(
+					'text',
+					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
+					text
+				),
 				uiparts,
 				transitions
 			);
@@ -11422,7 +11443,12 @@ var ScreenTransitionDiagram = function (_React$Component) {
 				_node2.default,
 				{ width: width, height: height, node: item.node },
 				screens,
-				edges
+				edges,
+				_react2.default.createElement(
+					'text',
+					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
+					text
+				)
 			);
 		}
 	}]);
@@ -11660,7 +11686,7 @@ var ZooScreen = function () {
 	}, {
 		key: 'addUIParts',
 		value: function addUIParts(uiparts) {
-			uiparts.node.parent = this.node;
+			uiparts.node.setParent(this.node);
 
 			this.uiparts.push(uiparts);
 		}
@@ -11726,7 +11752,7 @@ var ZooSTD = function (_ZooProcess) {
 	_createClass(ZooSTD, [{
 		key: 'addScreen',
 		value: function addScreen(screen) {
-			screen.node.parent = this.node;
+			screen.node.setParent(this.node);
 			this.screens.push(screen);
 			this.currentScreen = screen;
 		}

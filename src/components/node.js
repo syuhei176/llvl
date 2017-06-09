@@ -85,6 +85,7 @@ export default class Node extends React.Component {
 		let text = '';
 		let evaluatable = false, hiddable = false;
 		let absolutlyPos = node.getAPos();
+		let showAbsolutlyPosition = false;
 
 		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		return (<g transform={transform}>
@@ -96,7 +97,7 @@ export default class Node extends React.Component {
 	      		onMouseMove={this.onMouseMove.bind(this)}
 	      		onMouseUp={this.onMouseUp.bind(this)}
 	      		width={width} height={height} style={{"opacity":0}} ></rect>
-	      		<text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>
+	      		{showAbsolutlyPosition?(<text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>):<div/>}
 		      {children}
 	      </g>)
 	}
