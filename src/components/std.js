@@ -1,6 +1,5 @@
 import React from 'react'
-import Node from './node'
-import Edge from './edge'
+import {Node, Edge} from 'react-svg-graph-editor'
 import Screen from './screen'
 
 
@@ -46,9 +45,8 @@ export default class ScreenTransitionDiagram extends React.Component {
 
 		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";
-		return (<Node width={width} height={height} node={item.node}>
+		return (<Node width={width} height={height} node={item.node} edges={edges}>
 			{screens}
-			{edges}
 			<text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
 			</Node>)
 	}

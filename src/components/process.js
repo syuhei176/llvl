@@ -1,7 +1,5 @@
 import React from 'react'
-import Node from './node'
-import Edge from './edge'
-
+import {Node, Edge} from 'react-svg-graph-editor'
 
 export default class Process extends React.Component {
 	constructor(props) {
@@ -34,12 +32,11 @@ export default class Process extends React.Component {
 
 		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";
-		return (<Node width={width} height={height} node={item.node}>
+		return (<Node width={width} height={height} node={item.node} edges={edges}>
+					<text x="6" y="30" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
 					<g transform={icon_transform}>
 						<rect x="0" y="0" width="40" height="20" style={{"fill":"#5d67ef","stroke":"#111","strokeWidth":1}} onClick={this.onEdit.bind(this)}></rect>
 					</g>
-					<text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
-					{edges}
 			</Node>)
 	}
 }

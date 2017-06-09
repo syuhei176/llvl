@@ -1,5 +1,8 @@
 import React from 'react'
-import Graph from './graph'
+import Process from './process'
+import UIParts from './uiparts'
+import ScreenTransitionDiagram from './std'
+import {Graph} from 'react-svg-graph-editor'
 
 export default class Editor extends React.Component {
 	constructor(props) {
@@ -10,18 +13,22 @@ export default class Editor extends React.Component {
 
 	render() {
 		let {tree} = this.props;
-		let browserSize = {
-		  width: window.innerWidth || document.body.clientWidth,
-		  height: window.innerHeight || document.body.clientHeight
-		}
-		return (<svg width={browserSize.width} height={browserSize.height}>
-					<g>
-						<Graph graph={tree}></Graph>
-					</g></svg>);
-		/*
-		return (<div><svg width="600" height="36"><g>
-			<text x="10" y="20" style={{"fontSize":"20px"}} onClick={this.changeDefault.bind(this)}>Return</text>
-		</g></svg>{graphs}</div>)
-		*/
+
+		let processes = this.props.tree.processes.map((item) => {
+			let className = item.constructor.name;
+			if(className == 'ZooProcess') {
+				return (<Process x={100} y={100} graph={this.props.tree} item={item} depth={1}></Process>)
+			}else if(className == 'ZooUIParts') {
+				return (<UIParts x={100} y={100} graph={this.props.tree} item={item} depth={1}></UIParts>)
+			}
+		});
+		let stds = this.props.tree.stds.map((item) => {
+			let className = item.constructor.name;
+			return (<ScreenTransitionDiagram x={100} y={100} graph={this.props.tree} item={item} depth={1}></ScreenTransitionDiagram>)
+		});
+		return (<Graph>
+			{processes}
+			{stds}
+		</Graph>)
 	}
 }

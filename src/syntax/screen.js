@@ -1,5 +1,5 @@
 import UUID from 'uuid'
-import ZooNode from './node'
+import {NodePos} from 'react-svg-graph-editor'
 
 export default class ZooScreen {
 
@@ -8,7 +8,7 @@ export default class ZooScreen {
 		this.graph = graph;
 		this.uiparts = [];
 		this.transitions = [];
-		this.node = new ZooNode(options);
+		this.node = new NodePos(options);
 	}
 
 	getId() {

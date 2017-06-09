@@ -1,6 +1,5 @@
 import React from 'react'
-import Node from './node'
-import Edge from './edge'
+import {Node, Edge} from 'react-svg-graph-editor'
 import UIParts from './uiparts'
 
 export default class Screen extends React.Component {
@@ -41,10 +40,10 @@ export default class Screen extends React.Component {
 					width={width}
 					height={height}
 					stroke={(isCurrent?"rgb(10,150,10)":"rgb(0,0,0)")}
-					node={item.node}>
+					node={item.node}
+					edges={transitions}>
 						<text x="6" y="20" fill="#333" style={{"fontSize":"14px"}}>{text}</text>
 						{uiparts}
-						{transitions}
 						</Node>)
 	}
 }

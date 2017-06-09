@@ -1,6 +1,6 @@
 import {EventEmitter} from 'events';
 import UUID from 'uuid'
-import ZooNode from './node'
+import {NodePos} from 'react-svg-graph-editor'
 import Tuple from './tuple'
 
 /*
@@ -15,7 +15,7 @@ export default class ZooProcess extends EventEmitter {
 		this.id = UUID();
 		this.settings = options.settings || {};
 		this.wires = [];
-		this.node = new ZooNode(options);
+		this.node = new NodePos(options);
 		this.tuples = [];
 	}
 

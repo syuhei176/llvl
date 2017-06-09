@@ -1,6 +1,5 @@
 import React from 'react'
-import Node from './node'
-import Edge from './edge'
+import {Node, Edge} from 'react-svg-graph-editor'
 
 
 export default class UIParts extends React.Component {
@@ -30,7 +29,7 @@ export default class UIParts extends React.Component {
 
 		//let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		//let icon_transform = "translate("+(20)+","+(20)+")";
-		return (<Node width={width} height={height} node={item.node}>{edges}>
+		return (<Node width={width} height={height} node={item.node} edges={edges}>
 				{item.render(this.state.uiPartsState)}
 			</Node>)
 	}
