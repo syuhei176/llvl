@@ -3706,8 +3706,8 @@ var Node = function (_React$Component) {
 		var _this = _possibleConstructorReturn(this, (Node.__proto__ || Object.getPrototypeOf(Node)).call(this, props));
 
 		_this.state = {
-			x: props.item.node.x,
-			y: props.item.node.y,
+			x: props.node.x,
+			y: props.node.y,
 			nodeState: {},
 			hideChildren: false
 		};
@@ -3742,7 +3742,7 @@ var Node = function (_React$Component) {
 					x: dd.x,
 					y: dd.y
 				});
-				this.props.item.node.setPos(dd.x, dd.y);
+				this.props.node.setPos(dd.x, dd.y);
 			}
 		}
 	}, {
@@ -3786,26 +3786,23 @@ var Node = function (_React$Component) {
 		key: 'render',
 		value: function render() {
 			var _props = this.props,
-			    item = _props.item,
-			    depth = _props.depth;
+			    width = _props.width,
+			    height = _props.height,
+			    node = _props.node,
+			    depth = _props.depth,
+			    stroke = _props.stroke,
+			    children = _props.children;
 
-			var width = 120;
-			var height = 60;
-			var children = null;
 			var text = '';
 			var evaluatable = false,
 			    hiddable = false;
-			text = item.__data;
-			width = 50;
-			height = 25;
-			var absolutlyPos = item.node.getAPos();
+			var absolutlyPos = node.getAPos();
 
-			var transform = "translate(" + (this.state.x - width / 2) + "," + (this.state.y - 50) + ")";
-			var icon_transform = "translate(" + (width - 40) + "," + 0 + ")";
+			var transform = "translate(" + this.state.x + "," + this.state.y + ")";
 			return _react2.default.createElement(
 				'g',
 				{ transform: transform },
-				_react2.default.createElement('rect', { width: width, height: height, style: { "fill": "rgb(255,255,250)", "strokeWidth": 1, "stroke": "rgb(0,0,0)" } }),
+				_react2.default.createElement('rect', { width: width, height: height, style: { "fill": "rgb(255,255,250)", "strokeWidth": 1, "stroke": stroke || "rgb(0,0,0)" } }),
 				_react2.default.createElement('rect', { onClick: this.onClick.bind(this),
 					onMouseDown: this.onMouseDown.bind(this),
 					onMouseEnter: this.onMouseEnter.bind(this),
@@ -3813,30 +3810,6 @@ var Node = function (_React$Component) {
 					onMouseMove: this.onMouseMove.bind(this),
 					onMouseUp: this.onMouseUp.bind(this),
 					width: width, height: height, style: { "opacity": 0 } }),
-				_react2.default.createElement(
-					'g',
-					{ transform: icon_transform },
-					evaluatable ? _react2.default.createElement(
-						'g',
-						null,
-						_react2.default.createElement('rect', { x: '0', y: '0', width: '40', height: '20', style: { "fill": "#5a60ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEvalClicked.bind(this) }),
-						_react2.default.createElement(
-							'text',
-							{ x: '6', y: '17', fill: '#fff', style: { "fontSize": "12px" }, onClick: this.onEvalClicked.bind(this) },
-							'Eval'
-						)
-					) : _react2.default.createElement('div', null),
-					hiddable ? _react2.default.createElement(
-						'g',
-						null,
-						_react2.default.createElement('rect', { x: '0', y: '20', width: '40', height: '20', style: { "fill": "#5a60ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onShowClicked.bind(this) }),
-						_react2.default.createElement(
-							'text',
-							{ x: '6', y: '37', fill: '#fff', style: { "fontSize": "12px" }, onClick: this.onShowClicked.bind(this) },
-							this.state.hideChildren ? 'Show' : 'Hide'
-						)
-					) : _react2.default.createElement('div', null)
-				),
 				_react2.default.createElement(
 					'text',
 					null,
@@ -7484,14 +7457,17 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var UIParts = function (_Node) {
-	_inherits(UIParts, _Node);
+var UIParts = function (_React$Component) {
+	_inherits(UIParts, _React$Component);
 
 	function UIParts(props) {
 		_classCallCheck(this, UIParts);
 
 		var _this = _possibleConstructorReturn(this, (UIParts.__proto__ || Object.getPrototypeOf(UIParts)).call(this, props));
 
+		_this.state = {
+			uiPartsState: {}
+		};
 		var item = _this.props.item;
 
 		item.on('change', function (newState) {
@@ -7519,38 +7495,18 @@ var UIParts = function (_Node) {
 				return _react2.default.createElement(_edge2.default, { key: 'edge-' + index, src: item, target: target });
 			});
 
-			var transform = "translate(" + this.state.x + "," + this.state.y + ")";
-			var icon_transform = "translate(" + 20 + "," + 20 + ")";
 			return _react2.default.createElement(
-				'g',
-				{ transform: transform },
-				_react2.default.createElement('rect', { width: width, height: height, style: { "fill": "rgb(255,255,250)", "strokeWidth": 1, "stroke": "rgb(0,0,0)" } }),
-				_react2.default.createElement('rect', { onClick: this.onClick.bind(this),
-					onMouseDown: this.onMouseDown.bind(this),
-					onMouseEnter: this.onMouseEnter.bind(this),
-					onMouseLeave: this.onMouseLeave.bind(this),
-					onMouseMove: this.onMouseMove.bind(this),
-					onMouseUp: this.onMouseUp.bind(this),
-					width: width, height: height, style: { "opacity": 0 } }),
-				_react2.default.createElement(
-					'text',
-					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
-					text
-				),
+				_node2.default,
+				{ width: width, height: height, node: item.node },
 				edges,
-				_react2.default.createElement('g', { transform: icon_transform }),
-				item.render(this.state.uiPartsState),
-				_react2.default.createElement(
-					'text',
-					null,
-					'(' + absolutlyPos.x + ', ' + absolutlyPos.y + ')'
-				)
+				'>',
+				item.render(this.state.uiPartsState)
 			);
 		}
 	}]);
 
 	return UIParts;
-}(_node2.default);
+}(_react2.default.Component);
 
 exports.default = UIParts;
 module.exports = exports['default'];
@@ -11197,15 +11153,17 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Process = function (_Node) {
-	_inherits(Process, _Node);
+var Process = function (_React$Component) {
+	_inherits(Process, _React$Component);
 
 	function Process(props) {
 		_classCallCheck(this, Process);
 
 		var _this = _possibleConstructorReturn(this, (Process.__proto__ || Object.getPrototypeOf(Process)).call(this, props));
 
-		_this.state.text = JSON.stringify(props.item.settings);
+		_this.state = {
+			text: JSON.stringify(props.item.settings)
+		};
 		return _this;
 	}
 
@@ -11240,16 +11198,8 @@ var Process = function (_Node) {
 			var transform = "translate(" + this.state.x + "," + this.state.y + ")";
 			var icon_transform = "translate(" + (width - 40) + "," + 0 + ")";
 			return _react2.default.createElement(
-				'g',
-				{ transform: transform },
-				_react2.default.createElement('rect', { width: width, height: height, style: { "fill": "rgb(255,255,250)", "strokeWidth": 1, "stroke": "rgb(0,0,0)" } }),
-				_react2.default.createElement('rect', { onClick: this.onClick.bind(this),
-					onMouseDown: this.onMouseDown.bind(this),
-					onMouseEnter: this.onMouseEnter.bind(this),
-					onMouseLeave: this.onMouseLeave.bind(this),
-					onMouseMove: this.onMouseMove.bind(this),
-					onMouseUp: this.onMouseUp.bind(this),
-					width: width, height: height, style: { "opacity": 0 } }),
+				_node2.default,
+				{ width: width, height: height, node: item.node },
 				_react2.default.createElement(
 					'g',
 					{ transform: icon_transform },
@@ -11260,18 +11210,13 @@ var Process = function (_Node) {
 					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
 					text
 				),
-				edges,
-				_react2.default.createElement(
-					'text',
-					null,
-					'(' + absolutlyPos.x + ', ' + absolutlyPos.y + ')'
-				)
+				edges
 			);
 		}
 	}]);
 
 	return Process;
-}(_node2.default);
+}(_react2.default.Component);
 
 exports.default = Process;
 module.exports = exports['default'];
@@ -11313,15 +11258,17 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var Screen = function (_Node) {
-	_inherits(Screen, _Node);
+var Screen = function (_React$Component) {
+	_inherits(Screen, _React$Component);
 
 	function Screen(props) {
 		_classCallCheck(this, Screen);
 
 		var _this = _possibleConstructorReturn(this, (Screen.__proto__ || Object.getPrototypeOf(Screen)).call(this, props));
 
-		_this.state.text = JSON.stringify(props.item.settings);
+		_this.state = {
+			text: JSON.stringify(props.item.settings)
+		};
 		return _this;
 	}
 
@@ -11360,39 +11307,20 @@ var Screen = function (_Node) {
 			var transform = "translate(" + this.state.x + "," + this.state.y + ")";
 			var icon_transform = "translate(" + (width - 40) + "," + 0 + ")";
 			return _react2.default.createElement(
-				'g',
-				{ transform: transform },
-				_react2.default.createElement('rect', { width: width, height: height, style: { "fill": "rgb(255,255,250)", "strokeWidth": 2, "stroke": isCurrent ? "rgb(10,150,10)" : "rgb(0,0,0)" } }),
-				_react2.default.createElement('rect', { onClick: this.onClick.bind(this),
-					onMouseDown: this.onMouseDown.bind(this),
-					onMouseEnter: this.onMouseEnter.bind(this),
-					onMouseLeave: this.onMouseLeave.bind(this),
-					onMouseMove: this.onMouseMove.bind(this),
-					onMouseUp: this.onMouseUp.bind(this),
-					width: width, height: height, style: { "opacity": 0 } }),
-				_react2.default.createElement(
-					'g',
-					{ transform: icon_transform },
-					_react2.default.createElement('rect', { x: '0', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) })
-				),
-				_react2.default.createElement(
-					'text',
-					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
-					text
-				),
+				_node2.default,
+				{
+					width: width,
+					height: height,
+					stroke: isCurrent ? "rgb(10,150,10)" : "rgb(0,0,0)",
+					node: item.node },
 				uiparts,
-				transitions,
-				_react2.default.createElement(
-					'text',
-					null,
-					'(' + absolutlyPos.x + ', ' + absolutlyPos.y + ')'
-				)
+				transitions
 			);
 		}
 	}]);
 
 	return Screen;
-}(_node2.default);
+}(_react2.default.Component);
 
 exports.default = Screen;
 module.exports = exports['default'];
@@ -11434,15 +11362,17 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var ScreenTransitionDiagram = function (_Node) {
-	_inherits(ScreenTransitionDiagram, _Node);
+var ScreenTransitionDiagram = function (_React$Component) {
+	_inherits(ScreenTransitionDiagram, _React$Component);
 
 	function ScreenTransitionDiagram(props) {
 		_classCallCheck(this, ScreenTransitionDiagram);
 
 		var _this = _possibleConstructorReturn(this, (ScreenTransitionDiagram.__proto__ || Object.getPrototypeOf(ScreenTransitionDiagram)).call(this, props));
 
-		_this.state.text = JSON.stringify(props.item.settings);
+		_this.state = {
+			text: JSON.stringify(props.item.settings)
+		};
 		props.item.on('change', function (item) {
 			console.log(item);
 			_this.setState({
@@ -11488,39 +11418,16 @@ var ScreenTransitionDiagram = function (_Node) {
 			var transform = "translate(" + this.state.x + "," + this.state.y + ")";
 			var icon_transform = "translate(" + (width - 40) + "," + 0 + ")";
 			return _react2.default.createElement(
-				'g',
-				{ transform: transform },
-				_react2.default.createElement('rect', { width: width, height: height, style: { "fill": "rgb(255,255,250)", "strokeWidth": 1, "stroke": "rgb(0,0,0)" } }),
-				_react2.default.createElement('rect', { onClick: this.onClick.bind(this),
-					onMouseDown: this.onMouseDown.bind(this),
-					onMouseEnter: this.onMouseEnter.bind(this),
-					onMouseLeave: this.onMouseLeave.bind(this),
-					onMouseMove: this.onMouseMove.bind(this),
-					onMouseUp: this.onMouseUp.bind(this),
-					width: width, height: height, style: { "opacity": 0 } }),
-				_react2.default.createElement(
-					'g',
-					{ transform: icon_transform },
-					_react2.default.createElement('rect', { x: '0', y: '0', width: '40', height: '20', style: { "fill": "#5d67ef", "stroke": "#111", "strokeWidth": 1 }, onClick: this.onEdit.bind(this) })
-				),
-				_react2.default.createElement(
-					'text',
-					{ x: '6', y: '20', fill: '#333', style: { "fontSize": "14px" } },
-					text
-				),
+				_node2.default,
+				{ width: width, height: height, node: item.node },
 				screens,
-				edges,
-				_react2.default.createElement(
-					'text',
-					null,
-					'(' + absolutlyPos.x + ', ' + absolutlyPos.y + ')'
-				)
+				edges
 			);
 		}
 	}]);
 
 	return ScreenTransitionDiagram;
-}(_node2.default);
+}(_react2.default.Component);
 
 exports.default = ScreenTransitionDiagram;
 module.exports = exports['default'];

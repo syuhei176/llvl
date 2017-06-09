@@ -3,9 +3,12 @@ import Node from './node'
 import Edge from './edge'
 
 
-export default class UIParts extends Node {
+export default class UIParts extends React.Component {
 	constructor(props) {
 		super(props)
+		this.state = {
+			uiPartsState: {}
+		}
 		let {item} = this.props;
 		item.on('change', (newState)=>{
 			this.setState({
@@ -25,8 +28,15 @@ export default class UIParts extends Node {
 			return (<Edge key={'edge-'+index} src={item} target={target}></Edge>)
 		});
 
-		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
-		let icon_transform = "translate("+(20)+","+(20)+")";
+		//let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
+		//let icon_transform = "translate("+(20)+","+(20)+")";
+		return (<Node width={width} height={height} node={item.node}>{edges}>
+				{item.render(this.state.uiPartsState)}
+			</Node>)
+	}
+}
+
+/*
 		return (<g transform={transform}>
 			<rect width={width} height={height} style={{"fill":"rgb(255,255,250)","strokeWidth":1,"stroke":"rgb(0,0,0)"}}></rect>
 	      <rect onClick={this.onClick.bind(this)}
@@ -40,8 +50,6 @@ export default class UIParts extends Node {
       		  {edges}
 				<g transform={icon_transform}>
 				</g>
-					{item.render(this.state.uiPartsState)}
 	      		<text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>
 	      </g>)
-	}
-}
+	      */

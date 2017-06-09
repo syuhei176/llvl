@@ -3,10 +3,12 @@ import Node from './node'
 import Edge from './edge'
 import UIParts from './uiparts'
 
-export default class Screen extends Node {
+export default class Screen extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state.text = JSON.stringify(props.item.settings);
+		this.state = {
+			text: JSON.stringify(props.item.settings)
+		}
 	}
 
 	onEdit() {
@@ -35,6 +37,15 @@ export default class Screen extends Node {
 
 		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";
+		return (<Node
+					width={width}
+					height={height}
+					stroke={(isCurrent?"rgb(10,150,10)":"rgb(0,0,0)")}
+					node={item.node}>{uiparts}{transitions}</Node>)
+	}
+}
+
+/*
 		return (<g transform={transform}>
 			<rect width={width} height={height} style={{"fill":"rgb(255,255,250)","strokeWidth":2,"stroke":(isCurrent?"rgb(10,150,10)":"rgb(0,0,0)")}}></rect>
 	      <rect onClick={this.onClick.bind(this)}
@@ -51,5 +62,4 @@ export default class Screen extends Node {
       		  {uiparts}{transitions}
 	      		<text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>
 	      </g>)
-	}
-}
+	      */

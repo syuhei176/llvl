@@ -4,10 +4,12 @@ import Edge from './edge'
 import Screen from './screen'
 
 
-export default class ScreenTransitionDiagram extends Node {
+export default class ScreenTransitionDiagram extends React.Component {
 	constructor(props) {
 		super(props)
-		this.state.text = JSON.stringify(props.item.settings);
+		this.state = {
+			text: JSON.stringify(props.item.settings)
+		}
 		props.item.on('change', (item)=>{
 			console.log(item)
 			this.setState({
@@ -44,6 +46,10 @@ export default class ScreenTransitionDiagram extends Node {
 
 		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";
 		let icon_transform = "translate("+(width-40)+","+(0)+")";
+		return (<Node width={width} height={height} node={item.node}>{screens}{edges}</Node>)
+	}
+}
+/*
 		return (<g transform={transform}>
 			<rect width={width} height={height} style={{"fill":"rgb(255,255,250)","strokeWidth":1,"stroke":"rgb(0,0,0)"}}></rect>
 	      <rect onClick={this.onClick.bind(this)}
@@ -60,5 +66,4 @@ export default class ScreenTransitionDiagram extends Node {
       		  {screens}{edges}
 	      	  <text>{`(${absolutlyPos.x}, ${absolutlyPos.y})`}</text>
 	      </g>)
-	}
-}
+	      */
