@@ -3640,12 +3640,13 @@ var Edge = function (_React$Component) {
 			    src = _state.src,
 			    target = _state.target;
 
+			var offset = this.props.offset || { x: 160, y: 30 };
 			var srcPos = src.getAPos();
 			var targetPos = target.getAPos();
 			var xx = targetPos.x - srcPos.x;
 			var yy = targetPos.y + 30 - srcPos.y;
-			console.log(srcPos, targetPos);
-			var path = 'M 160 30 L ' + xx + ' ' + yy;
+			var bezierCurveControlPointX = 50;
+			var path = 'M ' + offset.x + ' ' + offset.y + ' C ' + (offset.x + bezierCurveControlPointX) + ' ' + offset.y + ' ' + (xx - bezierCurveControlPointX) + ' ' + yy + ' ' + xx + ' ' + yy;
 
 			return _react2.default.createElement(
 				'g',
@@ -11301,7 +11302,7 @@ var Screen = function (_React$Component) {
 				return _react2.default.createElement(_uiparts2.default, { x: 100, y: 100, graph: graph, item: item, depth: 1 });
 			});
 			var transitions = item.transitions.map(function (target) {
-				return _react2.default.createElement(_edge2.default, { src: item, target: target.screen });
+				return _react2.default.createElement(_edge2.default, { src: item, target: target.screen, offset: { x: 120, y: 80 } });
 			});
 
 			var transform = "translate(" + this.state.x + "," + this.state.y + ")";

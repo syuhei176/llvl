@@ -32,7 +32,7 @@ export default class Screen extends React.Component {
 			return (<UIParts x={100} y={100} graph={graph} item={item} depth={1}></UIParts>)
 		});
 		let transitions = item.transitions.map((target) => {
-			return (<Edge src={item} target={target.screen}></Edge>)
+			return (<Edge src={item} target={target.screen} offset={{x:120, y:80}}></Edge>)
 		});
 
 		let transform = "translate("+(this.state.x)+","+(this.state.y)+")";

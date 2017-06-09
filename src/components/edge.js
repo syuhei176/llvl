@@ -18,12 +18,13 @@ export default class Edge extends React.Component {
 
 	render() {
 		let {src, target} = this.state;
+		let offset = this.props.offset || {x:160, y:30}
 		let srcPos = src.getAPos();
 		let targetPos = target.getAPos();
 		let xx = targetPos.x - srcPos.x;
 		let yy = (targetPos.y+30) - srcPos.y;
-		console.log(srcPos, targetPos)
-		let path = `M 160 30 L ${xx} ${yy}`
+		let bezierCurveControlPointX = 50;
+		let path = `M ${offset.x} ${offset.y} C ${offset.x+bezierCurveControlPointX} ${offset.y} ${xx-bezierCurveControlPointX} ${yy} ${xx} ${yy}`
 		//let namePos = {x: src.x +(target.x - src.x) / 2, y: src.y +(target.y - src.y) / 2}
 		return (<g><path stroke="#333" strokeWidth="2" fill="none" d={path}/></g>)
 	}
